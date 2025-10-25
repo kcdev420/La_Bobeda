@@ -41,6 +41,17 @@ nav a:hover {
   color: #f5b041;
 }
 
+/* OCULTAMOS EL BOTÓN DE HAMBURGUESA POR DEFECTO (Escritorio) */
+.menu-toggle {
+    display: none; 
+    background: none;
+    border: none;
+    color: #f5b041;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+
 /* ====== HERO ====== */
 .hero {
   background: url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1074') center/cover no-repeat;
@@ -83,7 +94,7 @@ nav a:hover {
 }
 
 /* ===================================================================== */
-/* ====== ESTILOS PARA MENÚ DESPLEGABLE (Dropdown) ====== */
+/* ====== ESTILOS PARA MENÚ DESPLEGABLE (Dropdown) - Escritorio ====== */
 /* ===================================================================== */
 .dropdown {
   position: relative;
@@ -276,4 +287,79 @@ footer h2 {
 footer p {
   margin-top: 1rem;
   font-size: 0.9rem;
+}
+
+
+/* ===================================================================== */
+/* ====== MEDIA QUERY: ESTILOS PARA MÓVILES (Menú de Hamburguesa) ====== */
+/* ===================================================================== */
+@media (max-width: 768px) {
+    
+    /* MOSTRAR el botón de hamburguesa */
+    .menu-toggle {
+        display: block;
+    }
+
+    /* OCULTAR el menú por defecto y prepararlo para la vista vertical */
+    header nav {
+        display: none; 
+        flex-direction: column;
+        position: absolute;
+        top: 100%; 
+        right: 0;
+        width: 100%; 
+        background: #3c2a1a;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+        padding: 0; 
+        z-index: 9;
+    }
+    
+    /* Clase activa para MOSTRAR el menú al hacer clic */
+    header nav.active {
+        display: flex; 
+    }
+
+    /* Estilo de los enlaces y el botón desplegable en la lista vertical */
+    header nav a, 
+    header nav .dropbtn {
+        width: 100%;
+        text-align: left;
+        padding: 15px 30px; 
+        margin: 0; 
+        border-bottom: 1px solid #4a3320; 
+    }
+    
+    /* Quitar borde inferior del último elemento */
+    header nav a:last-child {
+        border-bottom: none;
+    }
+
+    /* Ajuste para el menú desplegable (anidado) */
+    .dropdown {
+        width: 100%;
+    }
+    
+    /* Submenú: lo posicionamos estáticamente para que se abra DENTRO del flujo vertical */
+    .dropdown-content {
+        position: static; 
+        min-width: 100%;
+        background-color: #24180d; 
+        box-shadow: none;
+        border-radius: 0;
+        overflow: visible;
+        border-top: 1px solid #4a3320;
+    }
+    
+    /* Sangría para los enlaces del submenú */
+    .dropdown-content a {
+        padding-left: 50px; 
+    }
+    
+    /* Opcional: Ajustar el header para que el título no se desborde */
+    header {
+        padding: 1rem;
+    }
+    header h1 {
+        font-size: 1.5rem;
+    }
 }
