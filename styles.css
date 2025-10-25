@@ -43,7 +43,7 @@ nav a:hover {
 
 /* ====== HERO ====== */
 .hero {
-  background: url('https://images.unsplash.com/photo-1606755962773-0c3c86a57f8b?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+  background: url('https://www.tuoagency.com/uploads/sizes/blog/blog/decoracion-restaurante-rustico.jpg') center/cover no-repeat;
   height: 90vh;
   display: flex;
   justify-content: center;
@@ -179,3 +179,4 @@ footer p {
   margin-top: 1rem;
   font-size: 0.9rem;
 }
+
