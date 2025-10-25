@@ -11,7 +11,10 @@
 
   <header>
     <h1>La Boveda</h1>
-    <nav>
+    <button class="menu-toggle" id="menu-toggle">
+        <i class='bx bx-menu'></i>
+    </button>
+    <nav id="nav-links">
       <a href="#inicio">Inicio</a>
       <div class="dropdown">
         <a href="#menu" class="dropbtn">Menú <i class='bx bx-chevron-down'></i></a>
@@ -215,13 +218,19 @@
   <footer id="redes">
     <h2>Síguenos</h2>
     <div class="social-links">
-     <!-- <a href="https://facebook.com/tu-usuario-de-facebook" target="_blank"><i class='bx bxl-facebook-circle'></i></a> -->
-      <a href="https://www.instagram.com/la_boveda_593/" target="_blank"><i class='bx bxl-instagram'></i></a>
+     <a href="https://www.instagram.com/la_boveda_593/" target="_blank"><i class='bx bxl-instagram'></i></a>
       <a href="https://www.tiktok.com/@la_boveda_593?lang=es-419" target="_blank"><i class='bx bxl-tiktok'></i></a>
       <a href="https://wa.me/593999935304" target="_blank"><i class='bx bxl-whatsapp'></i></a>
     </div>
     <p>© 2025 La Boveda. Todos los derechos reservados.</p>
   </footer>
+
+  <script>
+    document.getElementById('menu-toggle').onclick = function() {
+        // Alterna la clase 'active' en el elemento nav para mostrar/ocultar el menú
+        document.getElementById('nav-links').classList.toggle('active');
+    };
+  </script>
 
 </body>
 </html>
