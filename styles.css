@@ -83,6 +83,11 @@ nav a:hover {
 }
 
 /* ====== MENÚ ====== */
+.menu-item .btn {
+  display: inline-block;
+  margin-bottom: 15px; /* separa el botón del borde inferior */
+}
+
 .menu {
   padding: 3rem 2rem;
   text-align: center;
@@ -179,6 +184,7 @@ footer p {
   margin-top: 1rem;
   font-size: 0.9rem;
 }
+
 
 
 
