@@ -11,6 +11,18 @@ body {
   color: #fff;
 }
 
+/* ====== BOTÓN FLOTANTE DE CARRITO (NUEVO) ====== */
+.cart-btn-fixed {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000; /* Asegura que esté por encima de todo */
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+
 /* ====== HEADER ====== */
 header {
   background: #3c2a1a;
@@ -87,11 +99,18 @@ nav a:hover {
   text-decoration: none;
   font-weight: 600;
   transition: 0.3s;
+  cursor: pointer; /* Añadido para mejor UX */
+  border: none;
 }
 
-.btn:hover {
+.btn:hover:not([disabled]) {
   background: #d68910;
 }
+.btn[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 
 /* ===================================================================== */
 /* ====== ESTILOS PARA MENÚ DESPLEGABLE (Dropdown) - Escritorio ====== */
@@ -141,67 +160,60 @@ nav a:hover {
 }
 
 /* ===================================================================== */
-/* ====== MENÚ (ESTILOS MEJORADOS PARA ESPACIO Y ESTÉTICA) ====== */
+/* ====== MENÚ (ESTILOS DE LAS TARJETAS) ====== */
 /* ===================================================================== */
 
-/* Contenedor general de la sección del menú */
 .menu {
-  padding: 2rem 2rem; /* Más espacio general en la sección */
+  padding: 2rem 2rem; 
   text-align: center;
 }
 
-/* Título principal "Nuestro Menú" */
 .menu h2 {
   color: #f5b041;
-  margin-bottom: 1.5rem; /* Más espacio debajo del título principal */
+  margin-bottom: 1.5rem; 
   font-size: 2.5rem;
 }
 
-/* Títulos de categorías principales (Ej: Platos Principales, Bebidas) */
 .menu-section h3 {
-  font-size: 2.2rem; /* Más grande y vistoso */
+  font-size: 2.2rem; 
   color: #f5b041;
-  margin-top: 1rem; /* Más espacio arriba de cada nueva categoría */
+  margin-top: 1rem; 
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #5a412a; /* Línea sutil para destacar */
-  display: inline-block; /* Para que la línea solo ocupe el ancho del texto */
+  border-bottom: 2px solid #5a412a; 
+  display: inline-block; 
 }
 
-/* Títulos de sub-categorías (Ej: Alcohol, Gaseosas) */
 .menu-section h5 {
-  font-size: 1.5rem; /* Más grande */
+  font-size: 1.5rem; 
   color: #f5b041;
-  text-align: left; /* Alineado a la izquierda para mejor estructura */
+  text-align: left; 
   margin-top: 2rem;
   margin-bottom: 1.5rem;
 }
 
-/* Contenedor de las tarjetas de productos */
 .menu-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 30px; /* Más espacio entre las tarjetas */
+  gap: 30px; 
 }
 
-/* Tarjeta individual de cada producto */
 .menu-item {
   background: #3c2a1a;
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
   transition: transform 0.3s;
-  flex: 1 1 280px; /* Tamaño base de las tarjetas */
+  flex: 1 1 280px; 
   display: flex;
   flex-direction: column;
-  padding: 15px; /* Espacio interno */
+  padding: 15px; 
 }
 
 .menu-item:hover {
-  transform: translateY(-5px); /* Efecto de "levantar" */
+  transform: translateY(-5px); 
 }
 
-/* Imagen del producto */
 .menu-item img {
   width: 100%;
   height: 180px;
@@ -209,30 +221,70 @@ nav a:hover {
   border-radius: 10px;
 }
 
-/* Título del producto */
 .menu-item h4 {
   margin: 1rem 0 0.5rem;
   color: #f5b041;
   text-align: center;
 }
 
-/* Descripción del producto */
 .menu-item p {
   padding: 0 1rem 1rem;
   font-size: 0.95rem;
   text-align: center;
-  flex-grow: 1; /* Esto empuja el botón siempre hacia abajo */
+  flex-grow: 1; 
 }
 
-/* Botón "Pedir" */
-.menu-item .btn {
-  width: fit-content; /* El botón se ajusta al tamaño del texto */
-  align-self: center; /* Se centra horizontalmente en la tarjeta */
-  margin-top: auto; /* Se asegura de estar al final */
-  padding: 0.6rem 2rem; /* Ajustamos el padding para un mejor aspecto */
+/* ====== CONTROLES DE CANTIDAD EN PRODUCTOS (ACTUALIZADO) ====== */
+.add-to-cart-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem 0.5rem;
+    margin-top: auto; 
 }
 
-/* ====== EVENTOS ====== */
+.quantity-picker {
+    display: flex;
+    align-items: center;
+    border: 1px solid #5a412a;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #2b1d0e;
+}
+
+.qty-btn {
+    background-color: #3c2a1a;
+    color: #f5b041;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+    line-height: 1; /* Para centrar el texto +/- */
+}
+
+.qty-btn:hover {
+    background-color: #5a412a;
+}
+
+.item-qty-display {
+    padding: 5px 10px;
+    background-color: #2b1d0e;
+    color: #fff;
+    min-width: 30px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.add-to-cart-controls .btn.add-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+}
+
+
+/* ====== EVENTOS & FOOTER (Mantenido) ====== */
 .eventos {
   padding: 3rem 2rem;
   background: #24180d;
@@ -261,16 +313,14 @@ nav a:hover {
   background: #4a3320;
 }
 
-/* ====== FOOTER ====== */
 footer {
   padding: 3rem 2rem;
   text-align: center;
   background: #3c2a1a;
 }
-/* Estilo para el título "Síguenos" (h2 dentro del footer) */
 footer h2 {
- margin-bottom: 1.5rem; /* Aumenta el espacio DEBAJO de "Síguenos" */
- font-size: 2rem; /* Opcional: Aseguramos un buen tamaño */
+ margin-bottom: 1.5rem; 
+ font-size: 2rem; 
 }
 
 .social-links a {
@@ -291,75 +341,184 @@ footer p {
 
 
 /* ===================================================================== */
-/* ====== MEDIA QUERY: ESTILOS PARA MÓVILES (Menú de Hamburguesa) ====== */
+/* ====== ESTILOS PARA MODAL (POPUP) DEL CARRITO (ACTUALIZADO) ====== */
+/* ===================================================================== */
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 2000; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7); 
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: #2b1d0e; 
+    margin: 5% auto; 
+    padding: 30px;
+    border: 1px solid #f5b041;
+    width: 90%; 
+    max-width: 600px; 
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+.close-btn {
+    color: #f5b041;
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1; 
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #fff;
+    text-decoration: none;
+}
+
+.modal-content h2 {
+    color: #f5b041;
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 2px solid #5a412a;
+    padding-bottom: 10px;
+    font-size: 2rem;
+}
+
+/* Estilos para los elementos dentro del carrito */
+#cart-items-container {
+    max-height: 400px; 
+    overflow-y: auto; 
+    margin-bottom: 15px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #3c2a1a;
+}
+
+.cart-item-name {
+    flex-grow: 1;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.cart-item-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Cantidad en la modal (display) */
+.cart-qty-display {
+    padding: 5px 5px;
+    background-color: #3c2a1a;
+    color: #fff;
+    min-width: 30px;
+    text-align: center;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+/* Botones +/- en la modal */
+.cart-item-controls .qty-btn {
+    /* Usamos el mismo estilo que .qty-btn del menú, pero podemos ajustarlo */
+    padding: 5px 8px; 
+    font-size: 1rem;
+}
+
+.remove-item-btn {
+    background: none;
+    border: none;
+    color: #e74c3c; 
+    cursor: pointer;
+    font-size: 1.5rem; 
+    padding: 5px;
+    line-height: 1;
+    transition: color 0.2s;
+}
+.remove-item-btn i {
+    font-size: 1.5rem; /* Asegura el tamaño del icono de basura */
+}
+
+
+.remove-item-btn:hover {
+    color: #ff7f7f;
+}
+
+/* Botón y Total */
+#checkout-button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 1rem;
+    font-size: 1.1rem;
+}
+
+.cart-total-info {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 1.1rem;
+    color: #ccc;
+    font-weight: 500;
+}
+
+.empty-cart-message {
+    text-align: center;
+    padding: 30px 0;
+    color: #888;
+    font-style: italic;
+}
+
+
+/* ===================================================================== */
+/* ====== MEDIA QUERY: MÓVILES (Mantenido) ====== */
 /* ===================================================================== */
 @media (max-width: 768px) {
     
-    /* MOSTRAR el botón de hamburguesa */
-    .menu-toggle {
-        display: block;
-    }
+    .menu-toggle { display: block; }
+    header nav { display: none; flex-direction: column; position: absolute; top: 100%; right: 0; width: 100%; background: #3c2a1a; box-shadow: 0 4px 8px rgba(0,0,0,0.5); padding: 0; z-index: 9; }
+    header nav.active { display: flex; }
+    header nav a, header nav .dropbtn { width: 100%; text-align: left; padding: 15px 30px; margin: 0; border-bottom: 1px solid #4a3320; }
+    .dropdown { width: 100%; }
+    .dropdown-content { position: static; min-width: 100%; background-color: #24180d; box-shadow: none; border-radius: 0; overflow: visible; border-top: 1px solid #4a3320; }
+    .dropdown-content a { padding-left: 50px; }
+    header { padding: 1rem; }
+    header h1 { font-size: 1.5rem; }
+    .cart-btn-fixed { padding: 0.8rem 1.2rem; font-size: 0.9rem; }
 
-    /* OCULTAR el menú por defecto y prepararlo para la vista vertical */
-    header nav {
-        display: none; 
+    /* Modal en móviles */
+    .modal-content {
+        margin: 10px auto;
+        padding: 20px;
+        max-height: 95vh;
+        overflow-y: auto;
+    }
+    .cart-item {
+        /* Fuerza la pila de controles en móvil */
         flex-direction: column;
-        position: absolute;
-        top: 100%; 
-        right: 0;
-        width: 100%; 
-        background: #3c2a1a;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-        padding: 0; 
-        z-index: 9;
+        align-items: flex-start;
+        padding: 15px 0;
     }
-    
-    /* Clase activa para MOSTRAR el menú al hacer clic */
-    header nav.active {
-        display: flex; 
+    .cart-item-controls {
+        margin-top: 10px;
     }
-
-    /* Estilo de los enlaces y el botón desplegable en la lista vertical */
-    header nav a, 
-    header nav .dropbtn {
-        width: 100%;
-        text-align: left;
-        padding: 15px 30px; 
-        margin: 0; 
-        border-bottom: 1px solid #4a3320; 
-    }
-    
-    /* Quitar borde inferior del último elemento */
-    header nav a:last-child {
-        border-bottom: none;
-    }
-
-    /* Ajuste para el menú desplegable (anidado) */
-    .dropdown {
-        width: 100%;
-    }
-    
-    /* Submenú: lo posicionamos estáticamente para que se abra DENTRO del flujo vertical */
-    .dropdown-content {
-        position: static; 
-        min-width: 100%;
-        background-color: #24180d; 
-        box-shadow: none;
-        border-radius: 0;
-        overflow: visible;
-        border-top: 1px solid #4a3320;
-    }
-    
-    /* Sangría para los enlaces del submenú */
-    .dropdown-content a {
-        padding-left: 50px; 
-    }
-    
-    /* Opcional: Ajustar el header para que el título no se desborde */
-    header {
-        padding: 1rem;
-    }
-    header h1 {
-        font-size: 1.5rem;
+    .cart-item-name {
+        margin-bottom: 5px;
     }
 }
