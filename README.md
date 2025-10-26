@@ -1,2 +1,2 @@
-# La_Bobeda
-Sitio Web Oficial de La Bobeda
+# La_Boveda
+Sitio Web Oficial de La Boveda
