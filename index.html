@@ -22,18 +22,10 @@
         cursor: pointer;
         font-weight: 700;
         transition: transform 0.2s;
-        /* Estilos para el nuevo formato del botón con icono */
-        display: flex;
-        align-items: center;
-        gap: 8px; /* Espacio entre icono y texto */
     }
     .cart-btn-fixed:hover {
         transform: scale(1.05);
         background: #000;
-    }
-    /* Estilo para el icono dentro del botón */
-    .cart-btn-fixed i.bx-cart {
-        font-size: 1.5rem; 
     }
     .modal {
         display: none; 
@@ -140,7 +132,7 @@
 <body>
 
   <button id="cart-button" class="btn cart-btn-fixed" onclick="openCartModal()">
-    <i class='bx bx-cart'></i> Carrito (<span id="cart-count">0</span>)
+    Carrito (<span id="cart-count">0</span>)
   </button>
   
   <div id="cart-modal" class="modal">
