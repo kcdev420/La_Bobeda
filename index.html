@@ -156,9 +156,9 @@
     <i class='bx bx-menu menu-toggle' id="menu-toggle"></i>
     
     <nav id="nav-links">
-      <a href="#inicio">Inicio</a>
+      <a href="#inicio" onclick="closeMenu()">Inicio</a>
       <div class="dropdown">
-        <a href="#menu" class="dropbtn">Menú <i class='bx bx-chevron-down'></i></a>
+        <a href="#menu" class="dropbtn" onclick="closeMenu()">Menú <i class='bx bx-chevron-down'></i></a>
         <div class="dropdown-content">
           <a href="#platos-principales" onclick="closeMenu()">Platos Principales</a>
           <a href="#bebidas" onclick="closeMenu()">Bebidas</a>
@@ -166,8 +166,8 @@
           <a href="#otros" onclick="closeMenu()">Otros</a>
         </div>
       </div>
-      <a href="#eventos">Eventos</a>
-      <a href="#redes">Redes</a>
+      <a href="#eventos" onclick="closeMenu()">Eventos</a>
+      <a href="#redes" onclick="closeMenu()">Redes</a>
     </nav>
   </header>
 
@@ -515,19 +515,21 @@
 
   <script>
     // ======================================================
-    // 1. Lógica del Menú de Hamburguesa (Añadido)
+    // 1. Lógica del Menú de Hamburguesa
     // ======================================================
     const menuToggle = document.getElementById('menu-toggle');
     const navLinks = document.getElementById('nav-links');
 
     if (menuToggle && navLinks) {
         menuToggle.addEventListener('click', () => {
+            // Esto alterna la clase 'active' que el CSS usa para mostrar/ocultar el menú
             navLinks.classList.toggle('active');
         });
     }
 
     // Función para cerrar el menú en móvil al hacer clic en un enlace interno
     function closeMenu() {
+        // Solo cierra el menú si la pantalla es de móvil (<= 768px)
         if (window.innerWidth <= 768) {
             navLinks.classList.remove('active');
         }
@@ -535,11 +537,13 @@
 
 
     // ======================================================
-    // 2. Lógica del Carrito de Compras (Mantenido)
+    // 2. Lógica del Carrito de Compras
     // ======================================================
 
     // Configuración
-    localStorage.removeItem('bovedaCart'); // Vaciamos el carrito al cargar
+    // Esto es temporal; en producción, se recomienda cargar el carrito guardado.
+    // Lo mantengo para simular un inicio limpio en cada sesión.
+    // localStorage.removeItem('bovedaCart'); 
     let cart = []; 
     
     const whatsappNumber = "593999935304"; 
@@ -733,6 +737,16 @@
     
     // Cargar la cuenta del carrito al iniciar la página y añade un listener al campo de nombre
     document.addEventListener('DOMContentLoaded', () => {
+        // Intenta cargar el carrito guardado (si existe)
+        const savedCart = localStorage.getItem('bovedaCart');
+        if (savedCart) {
+            try {
+                cart = JSON.parse(savedCart);
+            } catch (e) {
+                console.error("Error al cargar el carrito guardado:", e);
+                cart = [];
+            }
+        }
         updateCartCount();
         clientNameInput.addEventListener('input', updateCartCount); // Actualiza el botón al escribir el nombre
     });
