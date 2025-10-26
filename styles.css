@@ -18,7 +18,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: sticky;
+  position: sticky; 
   top: 0;
   z-index: 10;
 }
@@ -29,7 +29,7 @@ header h1 {
   letter-spacing: 1px;
 }
 
-/* Estilos de navegación y menú de hamburguesa */
+/* Estilos de navegación de escritorio */
 nav {
     display: flex;
     align-items: center;
@@ -55,7 +55,6 @@ nav a:hover {
     color: #f5b041;
 }
 
-/* ===================================================================== */
 /* ====== HERO ====== */
 .hero {
   background: url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1074') center/cover no-repeat;
@@ -98,7 +97,7 @@ nav a:hover {
 }
 
 /* ===================================================================== */
-/* ====== ESTILOS PARA MENÚ DESPLEGABLE (Dropdown) ====== */
+/* ====== ESTILOS PARA MENÚ DESPLEGABLE (Dropdown) - ESCRITORIO ====== */
 /* ===================================================================== */
 .dropdown {
   position: relative;
@@ -145,7 +144,7 @@ nav a:hover {
 }
 
 /* ===================================================================== */
-/* ====== MENÚ (ESTILOS MEJORADOS PARA ESPACIO Y ESTÉTICA) ====== */
+/* ====== MENÚ (TARJETAS DE PRODUCTO) ====== */
 /* ===================================================================== */
 
 .menu {
@@ -219,10 +218,10 @@ nav a:hover {
   flex-grow: 1;
 }
 
-/* Controles de Cantidad y Botón */
+/* Controles de Cantidad y Botón (Solución de Choque) */
 .add-to-cart-controls {
     display: flex;
-    flex-direction: column; 
+    flex-direction: column; /* Apila en móvil */
     align-items: center;
     gap: 10px;
     margin-top: auto; 
@@ -245,8 +244,8 @@ nav a:hover {
 
 /* ====== MEDIA QUERIES (RESPONSIVE DESIGN) ====== */
 
-@media (min-width: 600px) {
-    /* Ajuste de controles de carrito para desktop */
+@media (min-width: 769px) {
+    /* Ajuste de controles de carrito para desktop (en una fila) */
     .add-to-cart-controls {
         flex-direction: row; 
         justify-content: space-between; 
@@ -266,6 +265,7 @@ nav a:hover {
     /* Menú de Hamburguesa para Móviles */
     header {
         padding: 1rem;
+        position: relative; /* Aseguramos que el NAV se posicione correctamente */
     }
     nav {
         flex-direction: column;
@@ -277,44 +277,66 @@ nav a:hover {
         background: #3c2a1a;
         box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         display: none; /* Oculto por defecto */
+        z-index: 50; /* Z-index alto para que cubra todo */
     }
+    /* CLAVE: Hace que el menú aparezca */
     nav.active {
-        display: flex;
+        display: block; /* Utilizamos block para forzar el apilamiento */
         padding-bottom: 10px;
     }
+    
+    .menu-toggle {
+        display: block; /* Muestra el botón de hamburguesa */
+    }
+    
+    /* Los enlaces y el dropdown deben ocupar todo el ancho y apilarse */
     nav a, .dropdown {
         width: 100%;
+        display: block; /* Asegura que cada elemento tome su propia línea */
         margin: 0;
         padding: 10px 20px;
         border-bottom: 1px solid #5a412a;
     }
-    nav a:last-child {
-        border-bottom: none;
-    }
-    .menu-toggle {
-        display: block; /* Muestra el botón de hamburguesa */
-    }
+
     .dropdown {
         padding: 0;
     }
+
+    .dropbtn {
+        width: 100%;
+        padding: 10px 20px;
+        justify-content: space-between;
+    }
+
+    /* Estilos para el submenú (dropdown-content) en móvil */
     .dropdown-content {
         position: static; /* Cambia a flujo estático para que se expanda hacia abajo */
         min-width: 100%;
         background-color: #2b1d0e;
         border-radius: 0;
         box-shadow: none;
+        display: block; /* Aseguramos que se muestre si el padre está visible */
     }
-    .dropbtn {
-        width: 100%;
-        padding: 10px 20px;
-        justify-content: space-between;
+    
+    /* Ocultamos los submenús por defecto en móvil y los mostramos al abrir el menú principal */
+    .dropdown-content {
+        display: none; 
     }
+    .dropdown:hover .dropdown-content, /* Mantener el hover para escritorio */
+    nav.active .dropdown-content { /* CLAVE: Muestra el submenú cuando la navegación está activa */
+        display: block;
+    }
+    
     .dropdown-content a {
         padding-left: 40px; /* Indentación para sub-ítems */
     }
+
+    .hero {
+        height: 60vh;
+    }
 }
 
-/* ====== EVENTOS ====== */
+/* ====== EVENTOS & FOOTER (SIN CAMBIOS) ====== */
 .eventos {
   padding: 3rem 2rem;
   background: #24180d;
@@ -343,13 +365,11 @@ nav a:hover {
   background: #4a3320;
 }
 
-/* ====== FOOTER ====== */
 footer {
   padding: 3rem 2rem;
   text-align: center;
   background: #3c2a1a;
 }
-/* Estilo para el título "Síguenos" (h2 dentro del footer) */
 footer h2 {
  margin-bottom: 1.5rem; 
  font-size: 2rem; 
