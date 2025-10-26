@@ -40,10 +40,10 @@
     }
     .modal-content {
         background-color: #3c2a1a;
-        margin: 15% auto; 
+        margin: 10% auto; /* Subimos un poco la modal */
         padding: 30px;
         border-radius: 10px;
-        width: 80%; 
+        width: 90%; /* Ajuste para móvil */
         max-width: 500px;
         box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         position: relative;
@@ -100,20 +100,31 @@
         font-weight: 600;
         color: #f5b041;
     }
-    /* Estilos para el picker de cantidad en el menú */
-    .add-to-cart-controls {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-top: 10px;
+
+    /* Estilos para el campo de nombre de cliente */
+    .client-name-container {
+        margin: 20px 0;
+        padding: 15px;
+        background: #5a412a;
+        border-radius: 8px;
     }
-    .quantity-picker {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+    .client-name-container label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #f5b041;
     }
-    .item-qty-display {
-        font-size: 1.1rem;
+    .client-name-container input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background: #2b1d0e;
+        color: white;
+        font-size: 1rem;
+    }
+    .client-name-container input[type="text"]::placeholder {
+        color: #aaa;
     }
   </style>
 </head>
@@ -127,8 +138,15 @@
       <div class="modal-content">
           <span class="close-btn" onclick="closeCartModal()">&times;</span>
           <h2>Tu Pedido</h2>
+          
+          <div class="client-name-container">
+              <label for="client-name">Tu Nombre:</label>
+              <input type="text" id="client-name" placeholder="Escribe tu nombre (requerido)" required>
+          </div>
+          
           <div id="cart-items-container">
               </div>
+          
           <p class="cart-total-info">Total de Artículos: <span id="modal-cart-count">0</span></p>
           <button id="checkout-button" class="btn" onclick="sendOrderToWhatsApp()">Hacer Pedido por WhatsApp</button>
       </div>
@@ -494,25 +512,16 @@
   </footer>
 
   <script>
-    // 1. Lógica del Menú de Hamburguesa (Solo se necesita si tienes un menú responsive)
-    /* Asumo que tienes un menú responsive, si no lo tienes, este código no afectará
-        document.getElementById('menu-toggle').onclick = function() {
-            document.getElementById('nav-links').classList.toggle('active');
-        };
-    */
-    
-    // 2. Lógica del Carrito de Compras (Actualizada)
-    
     // Configuración
-    // **CAMBIO CLAVE 1:** Vaciamos el carrito al cargar la página y la variable de almacenamiento.
     localStorage.removeItem('bovedaCart');
-    let cart = []; // El carrito siempre inicia vacío al cargar la página.
+    let cart = []; 
     
     const whatsappNumber = "593999935304"; 
     const cartModal = document.getElementById('cart-modal');
     const cartContainer = document.getElementById('cart-items-container');
     const checkoutButton = document.getElementById('checkout-button');
-    
+    const clientNameInput = document.getElementById('client-name'); // Nuevo: campo de nombre
+
     // Función para cambiar la cantidad en el selector de producto
     function changeQuantity(buttonElement, delta) {
         const quantityPicker = buttonElement.closest('.quantity-picker');
@@ -522,22 +531,24 @@
         currentQty += delta;
         
         if (currentQty < 1 || isNaN(currentQty)) {
-            currentQty = 1; // Asegura que la cantidad sea siempre 1 o más
+            currentQty = 1; 
         }
         
         quantityDisplay.textContent = currentQty;
     }
 
-    // Función para actualizar el contador visual
+    // Función para actualizar el contador visual y habilitar/deshabilitar el botón
     function updateCartCount() {
         let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
         document.getElementById('cart-count').textContent = totalItems;
         document.getElementById('modal-cart-count').textContent = totalItems;
         
-        // Desactivar el botón de pedido si el carrito está vacío
-        if (totalItems === 0) {
+        // Desactivar el botón de pedido si el carrito está vacío O si el nombre está vacío
+        const isNameValid = clientNameInput.value.trim() !== "";
+        
+        if (totalItems === 0 || !isNameValid) {
             checkoutButton.disabled = true;
-            checkoutButton.textContent = "Carrito Vacío";
+            checkoutButton.textContent = "Carrito Vacío o Falta el Nombre";
         } else {
             checkoutButton.disabled = false;
             checkoutButton.textContent = "Hacer Pedido por WhatsApp";
@@ -553,7 +564,6 @@
         let quantity = parseInt(quantityDisplay.textContent);
 
         if (quantity < 1 || isNaN(quantity)) {
-            // Este mensaje se mantiene porque indica una acción inválida, no una confirmación.
             alert("Por favor, selecciona una cantidad válida (mínimo 1).");
             return;
         }
@@ -566,13 +576,10 @@
             cart.push({ name: name, quantity: quantity });
         }
         
-        // Guarda el carrito y actualiza la vista
         localStorage.setItem('bovedaCart', JSON.stringify(cart));
         updateCartCount();
         
-        // *** CAMBIO CLAVE: NO SE LLAMA A 'alert()' AQUÍ ***
-        
-        // Opcional: Si quieres un feedback sutil, puedes cambiar el texto del botón por 1 segundo:
+        // Feedback visual sutil
         const originalText = buttonElement.textContent;
         buttonElement.textContent = "✅ ¡Añadido!";
         setTimeout(() => {
@@ -655,17 +662,25 @@
     }
 
 
-    // Función final para enviar el pedido por WhatsApp (VACÍA EL CARRITO AL ENVIAR)
+    // Función final para enviar el pedido por WhatsApp (INCLUYE NOMBRE Y VACÍA EL CARRITO)
     function sendOrderToWhatsApp() {
+        const clientName = clientNameInput.value.trim();
+
         if (cart.length === 0) {
             alert("Tu carrito está vacío.");
             return;
         }
         
+        if (clientName === "") {
+            alert("Por favor, ingresa tu nombre antes de enviar el pedido.");
+            clientNameInput.focus();
+            return;
+        }
+        
         closeCartModal(); 
 
-        // 1. Construir el mensaje de WhatsApp
-        let message = "¡Hola La Boveda! Quiero realizar el siguiente pedido:\n\n";
+        // 1. Construir el mensaje de WhatsApp (incluyendo el nombre)
+        let message = `¡Hola La Boveda! Mi nombre es *${clientName}* y quiero realizar el siguiente pedido:\n\n`;
         
         cart.forEach((item, index) => {
             message += `${index + 1}. *${item.quantity}x* ${item.name}\n`;
@@ -679,18 +694,20 @@
         // 2. Abrir la ventana de WhatsApp
         window.open(whatsappURL, '_blank');
         
-        // 3. **CAMBIO CLAVE 2:** Vaciamos el carrito automáticamente después de enviar.
+        // 3. Vaciamos el carrito automáticamente después de enviar.
         setTimeout(() => {
             cart = [];
             localStorage.removeItem('bovedaCart');
+            clientNameInput.value = ""; // También se borra el nombre
             updateCartCount();
-            // Opcional: Un alert (diferente) para indicar que se completó el envío
-            // alert("Tu pedido ha sido enviado a WhatsApp. ¡Gracias por tu compra!");
         }, 500); 
     }
     
-    // Cargar la cuenta del carrito al iniciar la página.
-    document.addEventListener('DOMContentLoaded', updateCartCount);
+    // Cargar la cuenta del carrito al iniciar la página y añade un listener al campo de nombre
+    document.addEventListener('DOMContentLoaded', () => {
+        updateCartCount();
+        clientNameInput.addEventListener('input', updateCartCount); // Actualiza el botón al escribir el nombre
+    });
     
     // Cerrar la modal haciendo clic fuera de ella
     window.onclick = function(event) {
