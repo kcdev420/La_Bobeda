@@ -10,13 +10,13 @@
 body {
   background-color: #f7f7f7;
   color: #333;
-  padding-top: 80px;
+  padding-top: 80px; /* Espacio para el header fijo */
 }
 
 /* ====== HEADER (Fijo, Transparente y Frosted Glass) ====== */
 header {
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(5px);
+  background: rgba(255, 255, 255, 0.4); /* Fondo blanco con transparencia */
+  backdrop-filter: blur(5px); /* Efecto Frosted Glass */
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -73,10 +73,10 @@ nav a.nav-link:hover {
 
 /* Botones principales */
 .btn {
-  background: linear-gradient(135deg, #6b4e31, #8b6f47); /* Degradado cálido */
+  background: linear-gradient(135deg, #6b4e31, #8b6f47); /* Degradado elegante inspirado en tonos cálidos */
   color: #fff;
-  padding: 0.8rem 1.8rem; /* Más padding para acomodar el ícono */
-  border-radius: 25px;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px; /* Bordes más redondeados */
   text-decoration: none;
   font-weight: 600;
   font-size: 1.1rem;
@@ -85,24 +85,14 @@ nav a.nav-link:hover {
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 10px; /* Espacio entre ícono y texto */
-  animation: pulse 2s infinite ease-in-out;
+  gap: 8px; /* Espacio para el ícono */
+  animation: pulse 2s infinite ease-in-out; /* Animación sutil */
 }
 
 .btn:hover {
   background: linear-gradient(135deg, #8b6f47, #a68a64);
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* Estilo para el ícono de carrito */
-.btn i.fa-shopping-cart {
-  font-size: 1rem; /* Tamaño del ícono */
-  transition: transform 0.3s;
-}
-
-.btn:hover i.fa-shopping-cart {
-  transform: scale(1.1); /* Efecto sutil al pasar el ratón */
 }
 
 /* Animación de pulsación para el botón */
@@ -114,13 +104,13 @@ nav a.nav-link:hover {
 
 /* Estilo para el ícono de la flecha */
 .btn::after {
-  content: '\2193';
+  content: '\2193'; /* Flecha hacia abajo (Unicode) */
   font-size: 1rem;
   transition: transform 0.3s;
 }
 
 .btn:hover::after {
-  transform: translateY(3px);
+  transform: translateY(3px); /* Efecto de movimiento de la flecha al pasar el ratón */
 }
 
 /* ===================================================================== */
@@ -550,102 +540,76 @@ footer p {
   100% { opacity: 0; }
 }
 
-/* Animación de entrada para el texto */
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* Texto centrado sobre el carrusel */
 .hero-text {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.65);
-  color: #fff;
-  padding: 2.5rem 3.5rem;
-  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.5); /* Fondo ligeramente más opaco para mejor legibilidad */
+  color: #333;
+  padding: 2rem 2.5rem;
+  border-radius: 20px; /* Bordes más suaves */
   text-align: center;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   width: 90%;
-  max-width: 900px;
+  max-width: 700px; /* Ligeramente más grande para pantallas grandes */
   min-width: 280px;
-  animation: fadeInUp 1s ease-out forwards;
 }
 
 /* Ajustes para el texto dentro de .hero-text */
 .hero-text h2 {
-  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-size: clamp(2rem, 6vw, 3rem); /* Texto más grande */
   margin-bottom: 1.2rem;
-  color: #fff;
-  font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  color: #000;
+  font-weight: 700; /* Más peso para destacar */
 }
 
 .hero-text p {
-  font-family: "Playfair Display", serif;
-  font-size: clamp(1.4rem, 4.5vw, 2rem);
+  font-size: clamp(1.1rem, 3.5vw, 1.5rem); /* Texto más grande */
   margin-bottom: 1.8rem;
-  font-weight: 700;
-  line-height: 1.6;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-  animation: fadeInUp 1.2s ease-out forwards;
+  line-height: 1.4; /* Mejor espaciado */
 }
 
 /* Media Queries para mayor control en diferentes pantallas */
 @media (max-width: 768px) {
   .hero-text {
-    padding: 1.8rem 2.5rem;
+    padding: 1.5rem 2rem;
     width: 95%;
-    max-width: 700px;
+    max-width: 600px;
   }
 
   .hero-text h2 {
-    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    font-size: clamp(1.5rem, 5vw, 2.2rem);
   }
 
   .hero-text p {
-    font-size: clamp(1.1rem, 4vw, 1.6rem);
+    font-size: clamp(0.9rem, 3vw, 1.2rem);
   }
 
   .btn {
-    padding: 0.7rem 1.5rem;
+    padding: 0.7rem 1.3rem;
     font-size: clamp(0.9rem, 2.5vw, 1rem);
-  }
-
-  .btn i.fa-shopping-cart {
-    font-size: 0.9rem;
   }
 }
 
 @media (max-width: 480px) {
   .hero-text {
-    padding: 1.2rem 1.8rem;
+    padding: 1rem 1.5rem;
     width: 98%;
     min-width: 240px;
   }
 
   .hero-text h2 {
-    font-size: clamp(1.3rem, 4.5vw, 1.8rem);
+    font-size: clamp(1.2rem, 4.5vw, 1.8rem);
   }
 
   .hero-text p {
-    font-size: clamp(0.9rem, 3.5vw, 1.3rem);
+    font-size: clamp(0.8rem, 2.5vw, 1rem);
   }
 
   .btn {
     padding: 0.6rem 1.2rem;
     font-size: clamp(0.8rem, 2vw, 0.9rem);
-  }
-
-  .btn i.fa-shopping-cart {
-    font-size: 0.8rem;
   }
 }
