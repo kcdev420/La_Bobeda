@@ -73,7 +73,7 @@ nav a.nav-link:hover {
 
 /* Botones principales */
 .btn {
-  background: color(#333); /* Degradado elegante inspirado en tonos cálidos */
+  background: #333; /* Degradado elegante inspirado en tonos cálidos */
   color: #fff;
   padding: 0.8rem 1.5rem;
   border-radius: 25px; /* Bordes más redondeados */
@@ -90,7 +90,7 @@ nav a.nav-link:hover {
 }
 
 .btn:hover {
-  background: color(#333);
+  background: #333;
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
@@ -602,6 +602,7 @@ footer p {
     font-size: clamp(0.8rem, 2vw, 0.9rem);
   }
 }
+
 
 
 
