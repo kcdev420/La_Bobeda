@@ -102,17 +102,6 @@ nav a.nav-link:hover {
   100% { transform: scale(1); }
 }
 
-/* Estilo para el ícono de la flecha */
-.btn::after {
-  content: '\2193'; /* Flecha hacia abajo (Unicode) */
-  font-size: 1rem;
-  transition: transform 0.3s;
-}
-
-.btn:hover::after {
-  transform: translateY(3px); /* Efecto de movimiento de la flecha al pasar el ratón */
-}
-
 /* ===================================================================== */
 /* ====== ESTILOS PARA MENÚ DESPLEGABLE (Dropdown) ====== */
 /* ===================================================================== */
@@ -613,3 +602,4 @@ footer p {
     font-size: clamp(0.8rem, 2vw, 0.9rem);
   }
 }
+
