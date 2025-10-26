@@ -10,27 +10,27 @@
 body {
   background-color: #f7f7f7;
   color: #333;
-  padding-top: 80px; /* Espacio para el header fijo */
+  padding-top: 80px;
 }
 
 /* ====== HEADER (Fijo, Transparente y Frosted Glass) ====== */
 header {
-  background: rgba(255, 255, 255, 0.4); /* Fondo blanco con transparencia */
-  backdrop-filter: blur(5px); /* Efecto Frosted Glass */
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(5px);
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: fixed; /* ¡Cambiado de sticky a fixed! */
+  position: fixed;
   top: 0;
-  width: 100%; /* Asegura que ocupe todo el ancho */
+  width: 100%;
   z-index: 10;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra sutil */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 header h1 {
   font-family: "Georgia", serif;
-  color: #000; /* Título oscuro */
+  color: #000;
   letter-spacing: 1px;
 }
 
@@ -41,7 +41,7 @@ nav {
 }
 
 nav a.nav-link {
-  color: #333; /* Enlaces oscuros */
+  color: #333;
   margin: 0 10px;
   text-decoration: none;
   font-weight: 500;
@@ -49,7 +49,7 @@ nav a.nav-link {
 }
 
 nav a.nav-link:hover {
-  color: #000; 
+  color: #000;
   font-weight: 600;
 }
 
@@ -58,15 +58,13 @@ nav a.nav-link:hover {
   display: none;
   font-size: 2rem;
   cursor: pointer;
-  color: #333; 
+  color: #333;
 }
 
 /* ====== HERO (Ajuste de altura ya que el header es fijo) ====== */
 .hero {
-  /* Mantenemos la imagen de fondo oscura para que el texto blanco/claro resalte */
   background: url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1074') center/cover no-repeat;
-  /* Se recomienda que la altura sea menos de 100vh ya que el header fijo ocupa espacio */
-  height: calc(100vh - 80px); 
+  height: calc(100vh - 80px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -75,20 +73,54 @@ nav a.nav-link:hover {
 
 /* Botones principales */
 .btn {
-  background: #333; /* Fondo oscuro */
-  color: #fff; /* Texto blanco */
-  padding: 0.6rem 1.2rem;
-  border-radius: 10px;
+  background: linear-gradient(135deg, #6b4e31, #8b6f47); /* Degradado cálido */
+  color: #fff;
+  padding: 0.8rem 1.8rem; /* Más padding para acomodar el ícono */
+  border-radius: 25px;
   text-decoration: none;
   font-weight: 600;
-  transition: 0.3s;
-  border: 1px solid #333;
+  font-size: 1.1rem;
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+  border: none;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px; /* Espacio entre ícono y texto */
+  animation: pulse 2s infinite ease-in-out;
 }
 
 .btn:hover {
-  background: #000;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  background: linear-gradient(135deg, #8b6f47, #a68a64);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para el ícono de carrito */
+.btn i.fa-shopping-cart {
+  font-size: 1rem; /* Tamaño del ícono */
+  transition: transform 0.3s;
+}
+
+.btn:hover i.fa-shopping-cart {
+  transform: scale(1.1); /* Efecto sutil al pasar el ratón */
+}
+
+/* Animación de pulsación para el botón */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Estilo para el ícono de la flecha */
+.btn::after {
+  content: '\2193';
+  font-size: 1rem;
+  transition: transform 0.3s;
+}
+
+.btn:hover::after {
+  transform: translateY(3px);
 }
 
 /* ===================================================================== */
@@ -114,7 +146,7 @@ nav a.nav-link:hover {
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.95); /* Blanco semi-transparente */
+  background-color: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(2px);
   min-width: 180px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
@@ -150,18 +182,18 @@ nav a.nav-link:hover {
 
 .menu h2 {
   color: #333;
-  margin-bottom: 1.5rem; 
+  margin-bottom: 1.5rem;
   font-size: 2.5rem;
 }
 
 .menu-section h3 {
-  font-size: 2.2rem; 
+  font-size: 2.2rem;
   color: #333;
-  margin-top: 1rem; 
+  margin-top: 1rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #ccc; /* Línea de división sutil */
-  display: inline-block; 
+  border-bottom: 2px solid #ccc;
+  display: inline-block;
 }
 
 .menu-section h5 {
@@ -182,7 +214,7 @@ nav a.nav-link:hover {
 /* ===== NUEVOS ESTILOS PARA CATEGORÍAS DEL MENÚ ===== */
 .menu-category-item {
   flex: 1 1 280px;
-  max-width: 400px; /* Límite de ancho para tarjetas de categoría */
+  max-width: 400px;
   height: 250px;
   border-radius: 15px;
   overflow: hidden;
@@ -226,7 +258,7 @@ nav a.nav-link:hover {
 
 /* Estilos para la vista de productos y botón de volver */
 .product-view {
-  display: none; /* Oculto por defecto */
+  display: none;
 }
 
 .back-btn {
@@ -248,7 +280,7 @@ nav a.nav-link:hover {
   background: #fff;
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1); /* Sombra más pronunciada para el efecto de elevación */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
   transition: transform 0.3s;
   flex: 1 1 280px;
   display: flex;
@@ -270,7 +302,7 @@ nav a.nav-link:hover {
 
 .menu-item h4 {
   margin: 1rem 0 0.5rem;
-  color: #000; /* Título de producto oscuro */
+  color: #000;
   text-align: center;
 }
 
@@ -284,10 +316,10 @@ nav a.nav-link:hover {
 /* Controles de Cantidad y Botón */
 .add-to-cart-controls {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: center;
   gap: 10px;
-  margin-top: auto; 
+  margin-top: auto;
   padding-top: 10px;
 }
 
@@ -295,7 +327,7 @@ nav a.nav-link:hover {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 0 auto; 
+  margin: 0 auto;
 }
 
 /* Botones de cantidad sutiles */
@@ -309,63 +341,61 @@ nav a.nav-link:hover {
 }
 
 .menu-item .add-btn {
-  width: 100%; 
-  align-self: center; 
-  padding: 0.6rem 1.2rem; 
+  width: 100%;
+  align-self: center;
+  padding: 0.6rem 1.2rem;
 }
 
 /* ====== MEDIA QUERIES (RESPONSIVE DESIGN) ====== */
 @media (min-width: 769px) {
-  /* Ajuste de controles de carrito para desktop (en una fila) */
   .add-to-cart-controls {
-    flex-direction: row; 
-    justify-content: space-between; 
+    flex-direction: row;
+    justify-content: space-between;
     width: 100%;
     gap: 15px;
   }
   .quantity-picker {
-    margin: 0; 
+    margin: 0;
   }
   .menu-item .add-btn {
-    width: auto; 
+    width: auto;
   }
 }
 
 @media (max-width: 768px) {
-  /* Menú de Hamburguesa para Móviles */
   header {
     padding: 1rem;
-    position: fixed; /* Asegura que siga fijo en móvil */
-    height: 70px; /* Altura definida para calcular el menú desplegable */
+    position: fixed;
+    height: 70px;
   }
   nav {
     flex-direction: column;
     align-items: flex-start;
     position: absolute;
-    top: 70px; /* Despliega el menú justo debajo del header fijo */
+    top: 70px;
     left: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.95); /* Fondo claro semi-transparente */
-    backdrop-filter: blur(5px); 
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    display: none; 
-    z-index: 50; 
-    max-height: calc(100vh - 70px); /* Limita la altura del menú a la pantalla restante */
-    overflow-y: auto; /* Permite scroll si el menú es muy largo */
+    display: none;
+    z-index: 50;
+    max-height: calc(100vh - 70px);
+    overflow-y: auto;
   }
   nav.active {
-    display: block; 
+    display: block;
     padding-bottom: 10px;
     border-top: 1px solid #eee;
   }
   
   .menu-toggle {
-    display: block; 
+    display: block;
   }
   
   .nav-link, .dropdown {
     width: 100%;
-    display: block; 
+    display: block;
     margin: 0;
     border-bottom: 1px solid #eee;
   }
@@ -393,18 +423,18 @@ nav a.nav-link:hover {
   }
 
   .dropdown-content {
-    position: static; 
-    display: none; /* Oculto hasta que se haga clic */
+    position: static;
+    display: none;
     min-width: 100%;
-    background-color: #f0f0f0; /* Submenú con un gris más claro */
+    background-color: #f0f0f0;
     border-radius: 0;
     box-shadow: none;
-    border-bottom: 1px solid #ddd; /* Separador inferior */
-    border-top: 1px solid #ddd; /* Separador superior */
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
   }
   
   .dropdown-content a {
-    padding-left: 40px; /* Añade sangría a los sub-items */
+    padding-left: 40px;
     border-bottom: 1px solid #e9e9e9;
   }
 
@@ -416,7 +446,7 @@ nav a.nav-link:hover {
 /* ====== EVENTOS (Sección Clara) ====== */
 .eventos {
   padding: 3rem 2rem;
-  background: #eaeaea; /* Fondo gris claro */
+  background: #eaeaea;
   text-align: center;
   color: #333;
 }
@@ -454,19 +484,19 @@ nav a.nav-link:hover {
 footer {
   padding: 3rem 2rem;
   text-align: center;
-  background: #fff; /* Fondo blanco */
+  background: #fff;
   color: #333;
   border-top: 1px solid #eee;
 }
 
 footer h2 {
   color: #333;
-  margin-bottom: 1.5rem; 
-  font-size: 2rem; 
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
 }
 
 .social-links a {
-  color: #333; /* Iconos oscuros */
+  color: #333;
   font-size: 2rem;
   margin: 0 10px;
   transition: 0.3s;
@@ -485,7 +515,7 @@ footer p {
 .carousel {
   position: relative;
   width: 100%;
-  height: calc(100vh - 80px); /* Mantiene el espacio para el header fijo */
+  height: calc(100vh - 80px);
   overflow: hidden;
 }
 
@@ -520,64 +550,102 @@ footer p {
   100% { opacity: 0; }
 }
 
+/* Animación de entrada para el texto */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Texto centrado sobre el carrusel */
 .hero-text {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.35); /* Fondo transparente */
-  color: #333;
-  padding: 1.5rem 2rem; /* Padding base más flexible */
-  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  padding: 2.5rem 3.5rem;
+  border-radius: 20px;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 90%; /* Ancho relativo para adaptarse a la pantalla */
-  max-width: 600px; /* Límite máximo para pantallas grandes */
-  min-width: 250px; /* Límite mínimo para pantallas pequeñas */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 900px;
+  min-width: 280px;
+  animation: fadeInUp 1s ease-out forwards;
 }
 
 /* Ajustes para el texto dentro de .hero-text */
 .hero-text h2 {
-  font-size: clamp(1.5rem, 5vw, 2rem); /* Tamaño de fuente adaptable */
-  margin-bottom: 1rem;
-  color: #000;
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  margin-bottom: 1.2rem;
+  color: #fff;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .hero-text p {
-  font-size: clamp(0.9rem, 3vw, 1.1rem); /* Tamaño de fuente adaptable */
-  margin-bottom: 1.5rem;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.4rem, 4.5vw, 2rem);
+  margin-bottom: 1.8rem;
+  font-weight: 700;
+  line-height: 1.6;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  animation: fadeInUp 1.2s ease-out forwards;
 }
 
 /* Media Queries para mayor control en diferentes pantallas */
 @media (max-width: 768px) {
   .hero-text {
-    padding: 1rem 1.5rem; /* Menos padding en móviles */
-    width: 95%; /* Aprovecha más el ancho en pantallas pequeñas */
-    max-width: 500px;
+    padding: 1.8rem 2.5rem;
+    width: 95%;
+    max-width: 700px;
   }
 
   .hero-text h2 {
-    font-size: clamp(1.2rem, 4vw, 1.8rem); /* Texto más pequeño en móviles */
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
   }
 
   .hero-text p {
-    font-size: clamp(0.8rem, 2.5vw, 1rem);
+    font-size: clamp(1.1rem, 4vw, 1.6rem);
+  }
+
+  .btn {
+    padding: 0.7rem 1.5rem;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+  }
+
+  .btn i.fa-shopping-cart {
+    font-size: 0.9rem;
   }
 }
 
 @media (max-width: 480px) {
   .hero-text {
-    padding: 0.8rem 1rem; /* Aún menos padding en pantallas muy pequeñas */
-    width: 98%; /* Casi todo el ancho disponible */
-    min-width: 200px;
+    padding: 1.2rem 1.8rem;
+    width: 98%;
+    min-width: 240px;
   }
 
   .hero-text h2 {
-    font-size: clamp(1rem, 3.5vw, 1.5rem);
+    font-size: clamp(1.3rem, 4.5vw, 1.8rem);
   }
 
   .hero-text p {
-    font-size: clamp(0.7rem, 2vw, 0.9rem);
+    font-size: clamp(0.9rem, 3.5vw, 1.3rem);
+  }
+
+  .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
+  }
+
+  .btn i.fa-shopping-cart {
+    font-size: 0.8rem;
   }
 }
