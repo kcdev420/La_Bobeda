@@ -6,15 +6,136 @@
   <title>La Boveda</title>
   <link rel="stylesheet" href="styles.css" />
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  
+  <style>
+    .cart-btn-fixed {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 100;
+        background: #f5b041;
+        color: #2b1d0e;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 50px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        cursor: pointer;
+        font-weight: 700;
+        transition: transform 0.2s;
+    }
+    .cart-btn-fixed:hover {
+        transform: scale(1.05);
+        background: #d68910;
+    }
+    .modal {
+        display: none; 
+        position: fixed; 
+        z-index: 200; 
+        left: 0;
+        top: 0;
+        width: 100%; 
+        height: 100%; 
+        overflow: auto; 
+        background-color: rgba(0,0,0,0.7); 
+    }
+    .modal-content {
+        background-color: #3c2a1a;
+        margin: 15% auto; 
+        padding: 30px;
+        border-radius: 10px;
+        width: 80%; 
+        max-width: 500px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        position: relative;
+    }
+    .close-btn {
+        color: #f5b041;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        transition: color 0.2s;
+    }
+    .close-btn:hover,
+    .close-btn:focus {
+        color: #fff;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    #cart-items-container .cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #5a412a;
+    }
+    .cart-item-name {
+        flex-grow: 1;
+    }
+    .cart-item-controls {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .qty-btn {
+        background: #5a412a;
+        border: none;
+        color: white;
+        padding: 3px 8px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    .remove-item-btn {
+        background: none;
+        border: none;
+        color: #f5b041;
+        cursor: pointer;
+        font-size: 1.2rem;
+    }
+    .remove-item-btn:hover {
+        color: red;
+    }
+    .cart-total-info {
+        margin-top: 20px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #f5b041;
+    }
+    /* Estilos para el picker de cantidad en el menú */
+    .add-to-cart-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 10px;
+    }
+    .quantity-picker {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .item-qty-display {
+        font-size: 1.1rem;
+    }
+  </style>
 </head>
 <body>
 
+  <button id="cart-button" class="btn cart-btn-fixed" onclick="openCartModal()">
+    Carrito (<span id="cart-count">0</span>)
+  </button>
+  
+  <div id="cart-modal" class="modal">
+      <div class="modal-content">
+          <span class="close-btn" onclick="closeCartModal()">&times;</span>
+          <h2>Tu Pedido</h2>
+          <div id="cart-items-container">
+              </div>
+          <p class="cart-total-info">Total de Artículos: <span id="modal-cart-count">0</span></p>
+          <button id="checkout-button" class="btn" onclick="sendOrderToWhatsApp()">Hacer Pedido por WhatsApp</button>
+      </div>
+  </div>
   <header>
     <h1>La Boveda</h1>
-    <button class="menu-toggle" id="menu-toggle">
-        <i class='bx bx-menu'></i>
-    </button>
-    <nav id="nav-links">
+    <nav>
       <a href="#inicio">Inicio</a>
       <div class="dropdown">
         <a href="#menu" class="dropbtn">Menú <i class='bx bx-chevron-down'></i></a>
@@ -44,29 +165,57 @@
     <div id="platos-principales" class="menu-section">
         <h3>Platos Principales</h3>
         <div class="menu-grid">
-            <div class="menu-item">
+            <div class="menu-item" data-name="Carne Asada">
                 <img src="https://images.unsplash.com/photo-1498092590708-048e0e2f46d7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170" alt="Carne asada">
                 <h4>Carne Asada</h4>
                 <p>Jugosa y al punto, con guarnición de papas rústicas.</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20Carne%20Asada" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" data-name="Alitas BBQ">
                 <img src="https://images.unsplash.com/photo-1645371958635-88dd6c8e1be7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1171" alt="Alitas BBQ">
                 <h4>Alitas BBQ</h4>
                 <p>Con salsa de la casa y un toque de miel.</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20unas%20Alitas%20BBQ" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" data-name="Hamburguesa Artesanal">
                 <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=60" alt="Hamburguesa Artesanal">
                 <h4>Hamburguesa Artesanal</h4>
                 <p>Pan artesanal, carne 100% res y papas fritas.</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20una%20Hamburguesa%20Artesanal" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" data-name="Parrillada Tierra y Mar">
                 <img src="https://plus.unsplash.com/premium_photo-1717345994192-f5bc10b61c09?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170" alt="Parrillada Tierra y Mar">
                 <h4>Parrillada Tierra y Mar</h4>
                 <p>La combinación perfecta entre carne y mariscos.</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20una%20Parrillada%20Tierra%20y%20Mar" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
         </div>
     </div>
@@ -75,74 +224,151 @@
         <h3>Bebidas</h3>
         <h5>Alcohol</h5>
         <div class="menu-grid">
-             <div class="menu-item">
+             <div class="menu-item" data-name="Pilsener">
                 <img src="https://images.unsplash.com/photo-1566633806327-68e152aaf26d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=870" alt="Cerveza">
                 <h4>Pilsener</h4>
                 <p>Pilsener bien helada</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20una%20Cerveza%20Pilsener" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" data-name="Cerveza Club">
                 <img src="https://images.unsplash.com/photo-1587582816472-81e94768469a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=871" alt="Cerveza">
                 <h4>Cerveza Club</h4>
                 <p> Una refrescante Club.</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20una%20Cerveza%20Club" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
-            <div class="menu-item">
-                <img src="https://images.unsplash.com/photo-1569529465841-dfecdab7503b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387" alt="Cerveza">
+            <div class="menu-item" data-name="Jonny Walker">
+                <img src="https://images.unsplash.com/photo-1569529465841-dfecdab7503b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387" alt="Whisky">
                 <h4>Jonny Walker</h4>
                 <p>Wiskey Black Label </p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20una%20Cerveza%20Pilsener" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" data-name="Michelada">
                 <img src="https://images.unsplash.com/photo-1706642249432-a0a3546c0537?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387" alt="Michelada">
                 <h4>Michelada</h4>
                 <p>Refrescante y con el toque picante perfecto.</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20una%20Michelada" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" data-name="Heineken">
                 <img src="https://images.unsplash.com/photo-1618885472179-5e474019f2a9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387" alt="Cerveza">
                 <h4>Heineken</h4>
                 <p> Una refrescante cerveza alemana.</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20una%20Cerveza%20Club" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
-            <div class="menu-item">
-                <img src="https://images.unsplash.com/photo-1539606494565-02e568638d91?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=327" alt="Cerveza">
+            <div class="menu-item" data-name="Vodka">
+                <img src="https://images.unsplash.com/photo-1539606494565-02e568638d91?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=327" alt="Vodka">
                 <h4>Vodka</h4>
                 <p>Absolut Vodka el trago ideal</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20un%20Vodka" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
-            <div class="menu-item">
-                <img src="https://images.unsplash.com/photo-1561150169-371f366b828a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387" alt="Cerveza">
+            <div class="menu-item" data-name="Bacardi 151">
+                <img src="https://images.unsplash.com/photo-1561150169-371f366b828a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387" alt="Ron">
                 <h4>Bacardi 151</h4>
                 <p>Bacardi es lo mejor para disfutra con amigos</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20un%20Vodka" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
         </div>
         <h5>Gaseosas</h5>
         <div class="menu-grid">
-            <div class="menu-item">
+            <div class="menu-item" data-name="Coca-Cola">
                 <img src="https://images.unsplash.com/photo-1629186235045-80d4147d90dc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=464" alt="Gaseosa">
                 <h4>Coca-Cola</h4>
                 <p>Coca-Cola el sabor de la alegria</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20una%20Gaseosa" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" data-name="Sprite">
                 <img src="https://plus.unsplash.com/premium_photo-1681487652640-9257693221d5?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=580" alt="Gaseosa">
                 <h4>Sprite</h4>
                 <p>Sprite ideal para refrescarte</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20una%20Gaseosa" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" data-name="Fanta">
                 <img src="https://images.unsplash.com/photo-1566846128021-b940b0eec910?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387" alt="Gaseosa">
                 <h4>Fanta</h4>
                 <p>Con un sabor a naranja unico</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20una%20Gaseosa" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" data-name="Fioravanti">
                 <img src="https://images.unsplash.com/photo-1581927692308-be9e43b4d860?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387" alt="Gaseosa">
                 <h4>Fioravanti</h4>
                 <p>Fioravanti el sabor nacional</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20una%20Gaseosa" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
         </div>
     </div>
@@ -150,23 +376,44 @@
     <div id="snacks" class="menu-section">
         <h3>Snacks</h3>
         <div class="menu-grid">
-            <div class="menu-item">
+            <div class="menu-item" data-name="Papas Fritas">
                 <img src="https://images.unsplash.com/photo-1617102738820-bee2545405fd?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=464" alt="Papas Fritas">
                 <h4>Papas Fritas</h4>
                 <p>Crujientes y doradas, con tus salsas favoritas.</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20Papas%20Fritas" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" data-name="Nachos con Queso">
                 <img src="https://images.unsplash.com/photo-1669624272709-c5b91f66b1b7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=869" alt="Nachos">
                 <h4>Nachos con Queso</h4>
                 <p>Con abundante queso cheddar y jalapeños.</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20Nachos" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
-            <div class="menu-item">
-                <img src="https://images.unsplash.com/photo-1621939514649-280e2ee25f60?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=870" alt="Nachos">
+            <div class="menu-item" data-name="Chocolates (Sniker)">
+                <img src="https://images.unsplash.com/photo-1621939514649-280e2ee25f60?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=870" alt="Chocolates">
                 <h4>Chocolates</h4>
                 <p>Barras de chocolates y los mejores dulces.</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quiero%20pedir%20Sniker" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
         </div>
     </div>
@@ -174,23 +421,44 @@
     <div id="otros" class="menu-section">
         <h3>Otros</h3>
         <div class="menu-grid">
-            <div class="menu-item">
+            <div class="menu-item" data-name="Postre del Día">
                 <img src="https://images.unsplash.com/photo-1565299543923-37dd37887442?auto=format&fit=crop&w=800&q=60" alt="Postre">
                 <h4>Postre del Día</h4>
                 <p>Pregunta por nuestra dulce sorpresa de hoy.</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quisiera%20saber%20cuál%20es%20el%20postre%20del%20día" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" data-name="Postre de chocolate">
                 <img src="https://plus.unsplash.com/premium_photo-1722686477214-3a412565ad62?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=837" alt="Postre">
                 <h4>Postre de chocolate</h4>
                 <p>Pregunta por nuestra dulce sorpresa de de chocolate.</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quisiera%20saber%20cuál%20es%20el%20postre%20del%20día" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" data-name="Postre de vainilla">
                 <img src="https://images.unsplash.com/photo-1593250136613-88a980458920?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=774" alt="Postre">
                 <h4>Postre de vainilla</h4>
                 <p>Pregunta por nuestra dulce sorpresa de vainilla.</p>
-                <a href="https://wa.me/593999935304?text=Hola!%20Quisiera%20saber%20cuál%20es%20el%20postre%20del%20día" class="btn">Pedir</a>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                </div>
             </div>
         </div>
     </div>
@@ -202,7 +470,7 @@
     <div class="event-grid">
       <div class="event-item">
         <h3>El Mejor Ambiente </h3>
-        <p>Todos los dias disfruta de la musica que mas te gusta.</p>
+        <p>Todos los dias disfruta de la musica que mas te gusta .</p>
       </div>
       <div class="event-item">
         <h3>Promo 2x1 en Pizza </h3>
@@ -210,7 +478,7 @@
       </div>
       <div class="event-item">
         <h3>Micheladas 2x1 </h3>
-        <p>Los fines de semana disfruta de la promocion en micheladas.</p>
+        <p>Los fines de semana disfruta de la promocion en micheladas .</p>
       </div>
     </div>
   </section>
@@ -226,12 +494,211 @@
   </footer>
 
   <script>
-    document.getElementById('menu-toggle').onclick = function() {
-        // Alterna la clase 'active' en el elemento nav para mostrar/ocultar el menú
-        document.getElementById('nav-links').classList.toggle('active');
-    };
+    // 1. Lógica del Menú de Hamburguesa (Solo se necesita si tienes un menú responsive)
+    /* Asumo que tienes un menú responsive, si no lo tienes, este código no afectará
+        document.getElementById('menu-toggle').onclick = function() {
+            document.getElementById('nav-links').classList.toggle('active');
+        };
+    */
+    
+    // 2. Lógica del Carrito de Compras (Actualizada)
+    
+    // Configuración
+    // **CAMBIO CLAVE 1:** Vaciamos el carrito al cargar la página y la variable de almacenamiento.
+    localStorage.removeItem('bovedaCart');
+    let cart = []; // El carrito siempre inicia vacío al cargar la página.
+    
+    const whatsappNumber = "593999935304"; 
+    const cartModal = document.getElementById('cart-modal');
+    const cartContainer = document.getElementById('cart-items-container');
+    const checkoutButton = document.getElementById('checkout-button');
+    
+    // Función para cambiar la cantidad en el selector de producto
+    function changeQuantity(buttonElement, delta) {
+        const quantityPicker = buttonElement.closest('.quantity-picker');
+        const quantityDisplay = quantityPicker.querySelector('.item-qty-display');
+        let currentQty = parseInt(quantityDisplay.textContent);
+        
+        currentQty += delta;
+        
+        if (currentQty < 1 || isNaN(currentQty)) {
+            currentQty = 1; // Asegura que la cantidad sea siempre 1 o más
+        }
+        
+        quantityDisplay.textContent = currentQty;
+    }
+
+    // Función para actualizar el contador visual
+    function updateCartCount() {
+        let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        document.getElementById('cart-count').textContent = totalItems;
+        document.getElementById('modal-cart-count').textContent = totalItems;
+        
+        // Desactivar el botón de pedido si el carrito está vacío
+        if (totalItems === 0) {
+            checkoutButton.disabled = true;
+            checkoutButton.textContent = "Carrito Vacío";
+        } else {
+            checkoutButton.disabled = false;
+            checkoutButton.textContent = "Hacer Pedido por WhatsApp";
+        }
+    }
+
+    // Función para añadir productos al carrito (¡SIN ALERT!)
+    function addToCart(buttonElement) {
+        const itemContainer = buttonElement.closest('.menu-item');
+        const name = itemContainer.getAttribute('data-name');
+        
+        const quantityDisplay = itemContainer.querySelector('.item-qty-display');
+        let quantity = parseInt(quantityDisplay.textContent);
+
+        if (quantity < 1 || isNaN(quantity)) {
+            // Este mensaje se mantiene porque indica una acción inválida, no una confirmación.
+            alert("Por favor, selecciona una cantidad válida (mínimo 1).");
+            return;
+        }
+
+        const existingItem = cart.find(item => item.name === name);
+
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            cart.push({ name: name, quantity: quantity });
+        }
+        
+        // Guarda el carrito y actualiza la vista
+        localStorage.setItem('bovedaCart', JSON.stringify(cart));
+        updateCartCount();
+        
+        // *** CAMBIO CLAVE: NO SE LLAMA A 'alert()' AQUÍ ***
+        
+        // Opcional: Si quieres un feedback sutil, puedes cambiar el texto del botón por 1 segundo:
+        const originalText = buttonElement.textContent;
+        buttonElement.textContent = "✅ ¡Añadido!";
+        setTimeout(() => {
+            buttonElement.textContent = originalText;
+        }, 1000); 
+
+        // Reiniciar la cantidad a 1 después de añadir
+        quantityDisplay.textContent = 1; 
+    }
+    
+    // Función para renderizar (dibujar) los ítems del carrito en la modal
+    function renderCart() {
+        cartContainer.innerHTML = ''; 
+
+        if (cart.length === 0) {
+            cartContainer.innerHTML = '<p class="empty-cart-message">Tu carrito está vacío.</p>';
+            return;
+        }
+
+        cart.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.classList.add('cart-item');
+            
+            const encodedName = encodeURIComponent(item.name);
+            
+            itemDiv.innerHTML = `
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-controls">
+                    <button class="qty-btn" onclick="updateCartItemQuantity('${encodedName}', -1)">-</button>
+                    <span class="cart-qty-display">${item.quantity}</span>
+                    <button class="qty-btn" onclick="updateCartItemQuantity('${encodedName}', 1)">+</button>
+                    <button class="remove-item-btn" onclick="removeItem('${encodedName}')">
+                        <i class='bx bx-trash'></i>
+                    </button>
+                </div>
+            `;
+            cartContainer.appendChild(itemDiv);
+        });
+        
+        updateCartCount();
+    }
+    
+    // Funciones de la Modal
+    function openCartModal() {
+        renderCart(); 
+        cartModal.style.display = 'block';
+    }
+
+    function closeCartModal() {
+        cartModal.style.display = 'none';
+    }
+
+    // Funciones de edición de la Modal
+    function updateCartItemQuantity(encodedName, delta) {
+        const name = decodeURIComponent(encodedName);
+        const item = cart.find(i => i.name === name);
+
+        if (item) {
+            let newQty = item.quantity + delta;
+
+            if (newQty < 1) {
+                // Si intenta bajar a 0, se elimina del carrito
+                removeItem(encodedName);
+                return;
+            }
+            
+            item.quantity = newQty;
+            localStorage.setItem('bovedaCart', JSON.stringify(cart));
+            
+            renderCart(); 
+        }
+    }
+    
+    function removeItem(encodedName) {
+        const name = decodeURIComponent(encodedName);
+        cart = cart.filter(item => item.name !== name); 
+        localStorage.setItem('bovedaCart', JSON.stringify(cart));
+        
+        renderCart();
+    }
+
+
+    // Función final para enviar el pedido por WhatsApp (VACÍA EL CARRITO AL ENVIAR)
+    function sendOrderToWhatsApp() {
+        if (cart.length === 0) {
+            alert("Tu carrito está vacío.");
+            return;
+        }
+        
+        closeCartModal(); 
+
+        // 1. Construir el mensaje de WhatsApp
+        let message = "¡Hola La Boveda! Quiero realizar el siguiente pedido:\n\n";
+        
+        cart.forEach((item, index) => {
+            message += `${index + 1}. *${item.quantity}x* ${item.name}\n`;
+        });
+
+        message += "\nPor favor, confirma mi orden.";
+
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+        // 2. Abrir la ventana de WhatsApp
+        window.open(whatsappURL, '_blank');
+        
+        // 3. **CAMBIO CLAVE 2:** Vaciamos el carrito automáticamente después de enviar.
+        setTimeout(() => {
+            cart = [];
+            localStorage.removeItem('bovedaCart');
+            updateCartCount();
+            // Opcional: Un alert (diferente) para indicar que se completó el envío
+            // alert("Tu pedido ha sido enviado a WhatsApp. ¡Gracias por tu compra!");
+        }, 500); 
+    }
+    
+    // Cargar la cuenta del carrito al iniciar la página.
+    document.addEventListener('DOMContentLoaded', updateCartCount);
+    
+    // Cerrar la modal haciendo clic fuera de ella
+    window.onclick = function(event) {
+        if (event.target == cartModal) {
+            closeCartModal();
+        }
+    }
   </script>
 
 </body>
 </html>
-
