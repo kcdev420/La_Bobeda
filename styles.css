@@ -6,13 +6,14 @@
   font-family: "Poppins", sans-serif;
 }
 
-/* Fondo principal claro y texto oscuro */
+/* Fondo principal claro, texto oscuro y PADDING para la barra fija */
 body {
   background-color: #f7f7f7;
   color: #333;
+  padding-top: 80px; /* Espacio para el header fijo */
 }
 
-/* ====== HEADER (Transparente y Frosted Glass) ====== */
+/* ====== HEADER (Fijo, Transparente y Frosted Glass) ====== */
 header {
   background: rgba(255, 255, 255, 0.9); /* Fondo blanco con transparencia */
   backdrop-filter: blur(5px); /* Efecto Frosted Glass */
@@ -20,8 +21,9 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: sticky; 
+  position: fixed; /* ¡Cambiado de sticky a fixed! */
   top: 0;
+  width: 100%; /* Asegura que ocupe todo el ancho */
   z-index: 10;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra sutil */
 }
@@ -59,11 +61,12 @@ nav a:hover {
     color: #333; 
 }
 
-/* ====== HERO ====== */
+/* ====== HERO (Ajuste de altura ya que el header es fijo) ====== */
 .hero {
   /* Mantenemos la imagen de fondo oscura para que el texto blanco/claro resalte */
   background: url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1074') center/cover no-repeat;
-  height: 90vh;
+  /* Se recomienda que la altura sea menos de 100vh ya que el header fijo ocupa espacio */
+  height: calc(100vh - 80px); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -289,13 +292,14 @@ nav a:hover {
     /* Menú de Hamburguesa para Móviles */
     header {
         padding: 1rem;
-        position: relative; 
+        position: fixed; /* Asegura que siga fijo en móvil */
+        height: 70px; /* Altura definida para calcular el menú desplegable */
     }
     nav {
         flex-direction: column;
         align-items: flex-start;
         position: absolute;
-        top: 100%; 
+        top: 70px; /* Despliega el menú justo debajo del header fijo */
         left: 0;
         width: 100%;
         background: rgba(255, 255, 255, 0.95); /* Fondo claro semi-transparente */
@@ -303,6 +307,8 @@ nav a:hover {
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         display: none; 
         z-index: 50; 
+        max-height: calc(100vh - 70px); /* Limita la altura del menú a la pantalla restante */
+        overflow-y: auto; /* Permite scroll si el menú es muy largo */
     }
     nav.active {
         display: block; 
