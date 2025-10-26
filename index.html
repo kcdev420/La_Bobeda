@@ -13,8 +13,8 @@
         bottom: 20px;
         right: 20px;
         z-index: 100;
-        background: #f5b041;
-        color: #2b1d0e;
+        background: #333; /* Botón oscuro */
+        color: #fff;
         padding: 10px 15px;
         border: none;
         border-radius: 50px;
@@ -25,7 +25,7 @@
     }
     .cart-btn-fixed:hover {
         transform: scale(1.05);
-        background: #d68910;
+        background: #000;
     }
     .modal {
         display: none; 
@@ -36,10 +36,10 @@
         width: 100%; 
         height: 100%; 
         overflow: auto; 
-        background-color: rgba(0,0,0,0.7); 
+        background-color: rgba(0,0,0,0.5); /* Fondo modal semi-transparente */
     }
     .modal-content {
-        background-color: #3c2a1a;
+        background-color: #fff; /* Contenido modal blanco */
         margin: 10% auto; 
         padding: 30px;
         border-radius: 10px;
@@ -47,9 +47,10 @@
         max-width: 500px;
         box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         position: relative;
+        color: #333; /* Texto oscuro */
     }
     .close-btn {
-        color: #f5b041;
+        color: #333;
         float: right;
         font-size: 28px;
         font-weight: bold;
@@ -57,7 +58,7 @@
     }
     .close-btn:hover,
     .close-btn:focus {
-        color: #fff;
+        color: #000;
         text-decoration: none;
         cursor: pointer;
     }
@@ -66,7 +67,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 10px 0;
-        border-bottom: 1px solid #5a412a;
+        border-bottom: 1px solid #eee; /* Separador sutil */
     }
     .cart-item-name {
         flex-grow: 1;
@@ -77,9 +78,9 @@
         gap: 5px;
     }
     .qty-btn {
-        background: #5a412a;
+        background: #eee;
         border: none;
-        color: white;
+        color: #333;
         padding: 3px 8px;
         cursor: pointer;
         border-radius: 5px;
@@ -87,7 +88,7 @@
     .remove-item-btn {
         background: none;
         border: none;
-        color: #f5b041;
+        color: #333;
         cursor: pointer;
         font-size: 1.2rem;
     }
@@ -98,29 +99,29 @@
         margin-top: 20px;
         font-size: 1.1rem;
         font-weight: 600;
-        color: #f5b041;
+        color: #000;
     }
 
     /* Estilos para el campo de nombre de cliente */
     .client-name-container {
         margin: 20px 0;
         padding: 15px;
-        background: #5a412a;
+        background: #f5f5f5; /* Fondo más claro */
         border-radius: 8px;
     }
     .client-name-container label {
         display: block;
         margin-bottom: 8px;
         font-weight: 600;
-        color: #f5b041;
+        color: #333;
     }
     .client-name-container input[type="text"] {
         width: 100%;
         padding: 10px;
-        border: none;
+        border: 1px solid #ccc;
         border-radius: 5px;
-        background: #2b1d0e;
-        color: white;
+        background: #fff;
+        color: #333;
         font-size: 1rem;
     }
     .client-name-container input[type="text"]::placeholder {
@@ -522,14 +523,12 @@
 
     if (menuToggle && navLinks) {
         menuToggle.addEventListener('click', () => {
-            // Esto alterna la clase 'active' que el CSS usa para mostrar/ocultar el menú
             navLinks.classList.toggle('active');
         });
     }
 
     // Función para cerrar el menú en móvil al hacer clic en un enlace interno
     function closeMenu() {
-        // Solo cierra el menú si la pantalla es de móvil (<= 768px)
         if (window.innerWidth <= 768) {
             navLinks.classList.remove('active');
         }
@@ -540,10 +539,6 @@
     // 2. Lógica del Carrito de Compras
     // ======================================================
 
-    // Configuración
-    // Esto es temporal; en producción, se recomienda cargar el carrito guardado.
-    // Lo mantengo para simular un inicio limpio en cada sesión.
-    // localStorage.removeItem('bovedaCart'); 
     let cart = []; 
     
     const whatsappNumber = "593999935304"; 
@@ -587,7 +582,7 @@
         }
     }
 
-    // Función para añadir productos al carrito (¡SIN ALERT!)
+    // Función para añadir productos al carrito
     function addToCart(buttonElement) {
         const itemContainer = buttonElement.closest('.menu-item');
         const name = itemContainer.getAttribute('data-name');
