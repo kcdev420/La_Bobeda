@@ -29,6 +29,12 @@ header h1 {
   letter-spacing: 1px;
 }
 
+/* Estilos de navegación y menú de hamburguesa */
+nav {
+    display: flex;
+    align-items: center;
+}
+
 nav a {
   color: #fff;
   margin: 0 10px;
@@ -41,6 +47,15 @@ nav a:hover {
   color: #f5b041;
 }
 
+/* Botón de Hamburguesa (Hidden by default) */
+.menu-toggle {
+    display: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #f5b041;
+}
+
+/* ===================================================================== */
 /* ====== HERO ====== */
 .hero {
   background: url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1074') center/cover no-repeat;
@@ -133,64 +148,57 @@ nav a:hover {
 /* ====== MENÚ (ESTILOS MEJORADOS PARA ESPACIO Y ESTÉTICA) ====== */
 /* ===================================================================== */
 
-/* Contenedor general de la sección del menú */
 .menu {
-  padding: 2rem 2rem; /* Más espacio general en la sección */
+  padding: 2rem 2rem;
   text-align: center;
 }
 
-/* Título principal "Nuestro Menú" */
 .menu h2 {
   color: #f5b041;
-  margin-bottom: 1.5rem; /* Más espacio debajo del título principal */
+  margin-bottom: 1.5rem; 
   font-size: 2.5rem;
 }
 
-/* Títulos de categorías principales (Ej: Platos Principales, Bebidas) */
 .menu-section h3 {
-  font-size: 2.2rem; /* Más grande y vistoso */
+  font-size: 2.2rem; 
   color: #f5b041;
-  margin-top: 1rem; /* Más espacio arriba de cada nueva categoría */
+  margin-top: 1rem; 
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #5a412a; /* Línea sutil para destacar */
-  display: inline-block; /* Para que la línea solo ocupe el ancho del texto */
+  border-bottom: 2px solid #5a412a; 
+  display: inline-block; 
 }
 
-/* Títulos de sub-categorías (Ej: Alcohol, Gaseosas) */
 .menu-section h5 {
-  font-size: 1.5rem; /* Más grande */
+  font-size: 1.5rem;
   color: #f5b041;
-  text-align: left; /* Alineado a la izquierda para mejor estructura */
+  text-align: left;
   margin-top: 2rem;
   margin-bottom: 1.5rem;
 }
 
-/* Contenedor de las tarjetas de productos */
 .menu-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 30px; /* Más espacio entre las tarjetas */
+  gap: 30px;
 }
 
-/* Tarjeta individual de cada producto */
 .menu-item {
   background: #3c2a1a;
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
   transition: transform 0.3s;
-  flex: 1 1 280px; /* Tamaño base de las tarjetas */
+  flex: 1 1 280px;
   display: flex;
   flex-direction: column;
-  padding: 15px; /* Espacio interno */
+  padding: 15px;
 }
 
 .menu-item:hover {
-  transform: translateY(-5px); /* Efecto de "levantar" */
+  transform: translateY(-5px);
 }
 
-/* Imagen del producto */
 .menu-item img {
   width: 100%;
   height: 180px;
@@ -198,30 +206,26 @@ nav a:hover {
   border-radius: 10px;
 }
 
-/* Título del producto */
 .menu-item h4 {
   margin: 1rem 0 0.5rem;
   color: #f5b041;
   text-align: center;
 }
 
-/* Descripción del producto */
 .menu-item p {
   padding: 0 1rem 1rem;
   font-size: 0.95rem;
   text-align: center;
-  flex-grow: 1; /* Esto empuja el botón siempre hacia abajo */
+  flex-grow: 1;
 }
 
-/* *** AJUSTE CLAVE 1: Soluciona el problema de choque *** El contenedor de controles de cantidad y el botón ahora utiliza flexbox 
-    para asegurar que estén en líneas separadas en móviles si es necesario.
-*/
+/* Controles de Cantidad y Botón */
 .add-to-cart-controls {
     display: flex;
-    flex-direction: column; /* Apila los elementos verticalmente por defecto (en móvil) */
+    flex-direction: column; 
     align-items: center;
-    gap: 10px; /* Espacio entre el selector y el botón */
-    margin-top: auto; /* Asegura que el selector y botón estén siempre abajo */
+    gap: 10px;
+    margin-top: auto; 
     padding-top: 10px;
 }
 
@@ -229,33 +233,86 @@ nav a:hover {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin: 0 auto; /* Centra el selector de cantidad */
+    margin: 0 auto; 
 }
 
-/* En pantallas más grandes, pueden ir en una fila */
-@media (min-width: 600px) {
-    .add-to-cart-controls {
-        flex-direction: row; /* En pantallas más grandes, ponlos en fila */
-        justify-content: space-between; /* Espacia el selector y el botón */
-        width: 100%;
-        gap: 15px;
-    }
-    .quantity-picker {
-        margin: 0; /* Quita el centrado forzado para alinearlo con el botón */
-    }
-    .menu-item .add-btn {
-        width: auto; /* Permite que el botón se ajuste al contenido */
-    }
-}
-
-
-/* Botón "Pedir" (renombrado a .add-btn en HTML) */
 .menu-item .add-btn {
-  width: 100%; /* El botón ocupa todo el ancho disponible en la tarjeta (útil en móviles) */
+  width: 100%; 
   align-self: center; 
   padding: 0.6rem 1.2rem; 
 }
 
+
+/* ====== MEDIA QUERIES (RESPONSIVE DESIGN) ====== */
+
+@media (min-width: 600px) {
+    /* Ajuste de controles de carrito para desktop */
+    .add-to-cart-controls {
+        flex-direction: row; 
+        justify-content: space-between; 
+        width: 100%;
+        gap: 15px;
+    }
+    .quantity-picker {
+        margin: 0; 
+    }
+    .menu-item .add-btn {
+        width: auto; 
+    }
+}
+
+
+@media (max-width: 768px) {
+    /* Menú de Hamburguesa para Móviles */
+    header {
+        padding: 1rem;
+    }
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+        position: absolute;
+        top: 100%; /* Justo debajo del header */
+        left: 0;
+        width: 100%;
+        background: #3c2a1a;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        display: none; /* Oculto por defecto */
+    }
+    nav.active {
+        display: flex;
+        padding-bottom: 10px;
+    }
+    nav a, .dropdown {
+        width: 100%;
+        margin: 0;
+        padding: 10px 20px;
+        border-bottom: 1px solid #5a412a;
+    }
+    nav a:last-child {
+        border-bottom: none;
+    }
+    .menu-toggle {
+        display: block; /* Muestra el botón de hamburguesa */
+    }
+    .dropdown {
+        padding: 0;
+    }
+    .dropdown-content {
+        position: static; /* Cambia a flujo estático para que se expanda hacia abajo */
+        min-width: 100%;
+        background-color: #2b1d0e;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    .dropbtn {
+        width: 100%;
+        padding: 10px 20px;
+        justify-content: space-between;
+    }
+    .dropdown-content a {
+        padding-left: 40px; /* Indentación para sub-ítems */
+    }
+}
 
 /* ====== EVENTOS ====== */
 .eventos {
