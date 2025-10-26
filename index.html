@@ -157,18 +157,20 @@
     <i class='bx bx-menu menu-toggle' id="menu-toggle"></i>
     
     <nav id="nav-links">
-      <a href="#inicio" onclick="closeMenu()">Inicio</a>
+      <a href="#inicio" class="nav-link" onclick="closeMenu()">Inicio</a>
+      
       <div class="dropdown">
-        <a href="#menu" class="dropbtn" onclick="closeMenu()">Menú <i class='bx bx-chevron-down'></i></a>
+        <a href="#menu" class="nav-link dropbtn">Menú <i class='bx bx-chevron-down'></i></a>
         <div class="dropdown-content">
-          <a href="#platos-principales" onclick="closeMenu()">Platos Principales</a>
-          <a href="#bebidas" onclick="closeMenu()">Bebidas</a>
-          <a href="#snacks" onclick="closeMenu()">Snacks</a>
-          <a href="#otros" onclick="closeMenu()">Otros</a>
+          <a href="#platos-principales" onclick="closeMenuAndShowCategory('platos-principales')">Platos Principales</a>
+          <a href="#bebidas" onclick="closeMenuAndShowCategory('bebidas')">Bebidas</a>
+          <a href="#snacks" onclick="closeMenuAndShowCategory('snacks')">Snacks</a>
+          <a href="#otros" onclick="closeMenuAndShowCategory('otros')">Otros</a>
         </div>
       </div>
-      <a href="#eventos" onclick="closeMenu()">Eventos</a>
-      <a href="#redes" onclick="closeMenu()">Redes</a>
+      
+      <a href="#eventos" class="nav-link" onclick="closeMenu()">Eventos</a>
+      <a href="#redes" class="nav-link" onclick="closeMenu()">Redes</a>
     </nav>
   </header>
 
@@ -182,8 +184,36 @@
 
   <section id="menu" class="menu">
     <h2>Nuestro Menú</h2>
+    
+    <div id="menu-categories" class="menu-grid">
+        <div class="menu-category-item" data-target="platos-principales">
+            <img src="https://images.unsplash.com/photo-1498092590708-048e0e2f46d7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170" alt="Platos Principales">
+            <div class="category-overlay">
+                <h4>Platos Principales</h4>
+            </div>
+        </div>
+        <div class="menu-category-item" data-target="bebidas">
+            <img src="https://images.unsplash.com/photo-1566633806327-68e152aaf26d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=870" alt="Bebidas">
+            <div class="category-overlay">
+                <h4>Bebidas</h4>
+            </div>
+        </div>
+        <div class="menu-category-item" data-target="snacks">
+            <img src="https://images.unsplash.com/photo-1617102738820-bee2545405fd?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=464" alt="Snacks">
+            <div class="category-overlay">
+                <h4>Snacks</h4>
+            </div>
+        </div>
+        <div class="menu-category-item" data-target="otros">
+            <img src="https://images.unsplash.com/photo-1565299543923-37dd37887442?auto=format&fit=crop&w=800&q=60" alt="Otros">
+            <div class="category-overlay">
+                <h4>Otros</h4>
+            </div>
+        </div>
+    </div>
 
-    <div id="platos-principales" class="menu-section">
+    <div id="platos-principales" class="menu-section product-view">
+        <button class="btn back-btn">← Volver a Categorías</button>
         <h3>Platos Principales</h3>
         <div class="menu-grid">
             <div class="menu-item" data-name="Carne Asada">
@@ -239,9 +269,11 @@
                 </div>
             </div>
         </div>
+        <button class="btn back-btn" style="margin-top: 2rem;">← Volver a Categorías</button>
     </div>
 
-    <div id="bebidas" class="menu-section">
+    <div id="bebidas" class="menu-section product-view">
+        <button class="btn back-btn">← Volver a Categorías</button>
         <h3>Bebidas</h3>
         <h5>Alcohol</h5>
         <div class="menu-grid">
@@ -392,9 +424,11 @@
                 </div>
             </div>
         </div>
+        <button class="btn back-btn" style="margin-top: 2rem;">← Volver a Categorías</button>
     </div>
     
-    <div id="snacks" class="menu-section">
+    <div id="snacks" class="menu-section product-view">
+        <button class="btn back-btn">← Volver a Categorías</button>
         <h3>Snacks</h3>
         <div class="menu-grid">
             <div class="menu-item" data-name="Papas Fritas">
@@ -437,9 +471,11 @@
                 </div>
             </div>
         </div>
+        <button class="btn back-btn" style="margin-top: 2rem;">← Volver a Categorías</button>
     </div>
     
-    <div id="otros" class="menu-section">
+    <div id="otros" class="menu-section product-view">
+        <button class="btn back-btn">← Volver a Categorías</button>
         <h3>Otros</h3>
         <div class="menu-grid">
             <div class="menu-item" data-name="Postre del Día">
@@ -482,6 +518,7 @@
                 </div>
             </div>
         </div>
+        <button class="btn back-btn" style="margin-top: 2rem;">← Volver a Categorías</button>
     </div>
   </section>
 
@@ -531,6 +568,17 @@
     function closeMenu() {
         if (window.innerWidth <= 768) {
             navLinks.classList.remove('active');
+        }
+    }
+    
+    // Nueva función para cerrar el menú y mostrar una categoría específica
+    function closeMenuAndShowCategory(categoryId) {
+        closeMenu(); // Cierra el menú de hamburguesa
+        
+        // Simula un clic en la tarjeta de categoría correspondiente
+        const categoryCard = document.querySelector(`.menu-category-item[data-target="${categoryId}"]`);
+        if (categoryCard) {
+            categoryCard.click();
         }
     }
 
@@ -730,9 +778,46 @@
         }, 500); 
     }
     
-    // Cargar la cuenta del carrito al iniciar la página y añade un listener al campo de nombre
+    // ======================================================
+    // 3. Lógica del Menú por Categorías
+    // ======================================================
     document.addEventListener('DOMContentLoaded', () => {
-        // Intenta cargar el carrito guardado (si existe)
+        const categoryContainer = document.getElementById('menu-categories');
+        const categoryItems = document.querySelectorAll('.menu-category-item');
+        const productViews = document.querySelectorAll('.product-view');
+        const backButtons = document.querySelectorAll('.back-btn');
+        
+        // Mostrar productos al hacer clic en una categoría
+        categoryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const targetId = item.getAttribute('data-target');
+                const targetView = document.getElementById(targetId);
+
+                // Ocultar la vista de categorías
+                categoryContainer.style.display = 'none';
+
+                // Ocultar todas las vistas de productos
+                productViews.forEach(view => view.style.display = 'none');
+                
+                // Mostrar la vista de productos seleccionada
+                if (targetView) {
+                    targetView.style.display = 'block';
+                }
+            });
+        });
+
+        // Volver a la vista de categorías
+        backButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Ocultar todas las vistas de productos
+                productViews.forEach(view => view.style.display = 'none');
+                
+                // Mostrar la vista de categorías
+                categoryContainer.style.display = 'flex'; // O 'grid', dependiendo del CSS
+            });
+        });
+        
+        // Cargar la cuenta del carrito al iniciar la página y añade un listener al campo de nombre
         const savedCart = localStorage.getItem('bovedaCart');
         if (savedCart) {
             try {
@@ -744,6 +829,27 @@
         }
         updateCartCount();
         clientNameInput.addEventListener('input', updateCartCount); // Actualiza el botón al escribir el nombre
+        
+        
+        // ===== NUEVO: Lógica para el menú desplegable en móvil =====
+        const mobileDropdowns = document.querySelectorAll('#nav-links .dropdown');
+        mobileDropdowns.forEach(dropdown => {
+            const dropbtn = dropdown.querySelector('.dropbtn');
+            dropbtn.addEventListener('click', function(event) {
+                if (window.innerWidth <= 768) {
+                    event.preventDefault(); // Previene la navegación al hacer clic en el enlace principal
+                    const content = this.nextElementSibling;
+                    // Cierra otros submenús abiertos
+                    document.querySelectorAll('#nav-links .dropdown-content').forEach(otherContent => {
+                        if (otherContent !== content) {
+                            otherContent.style.display = 'none';
+                        }
+                    });
+                    // Alterna el submenú actual
+                    content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+                }
+            });
+        });
     });
     
     // Cerrar la modal haciendo clic fuera de ella
