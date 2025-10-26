@@ -74,7 +74,7 @@ nav a:hover {
 }
 
 .hero-text {
-  background: rgba(255, 255, 255, 0.85); /* Fondo claro con transparencia */
+  background: rgba(255, 255, 255, 0.25); /* Fondo claro con transparencia */
   color: #333; /* Texto oscuro */
   padding: 2rem;
   border-radius: 15px;
@@ -424,3 +424,4 @@ footer p {
   margin-top: 1rem;
   font-size: 0.9rem;
 }
+
