@@ -40,10 +40,10 @@
     }
     .modal-content {
         background-color: #3c2a1a;
-        margin: 10% auto; /* Subimos un poco la modal */
+        margin: 10% auto; 
         padding: 30px;
         border-radius: 10px;
-        width: 90%; /* Ajuste para móvil */
+        width: 90%; 
         max-width: 500px;
         box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         position: relative;
@@ -153,15 +153,17 @@
   </div>
   <header>
     <h1>La Boveda</h1>
-    <nav>
+    <i class='bx bx-menu menu-toggle' id="menu-toggle"></i>
+    
+    <nav id="nav-links">
       <a href="#inicio">Inicio</a>
       <div class="dropdown">
         <a href="#menu" class="dropbtn">Menú <i class='bx bx-chevron-down'></i></a>
         <div class="dropdown-content">
-          <a href="#platos-principales">Platos Principales</a>
-          <a href="#bebidas">Bebidas</a>
-          <a href="#snacks">Snacks</a>
-          <a href="#otros">Otros</a>
+          <a href="#platos-principales" onclick="closeMenu()">Platos Principales</a>
+          <a href="#bebidas" onclick="closeMenu()">Bebidas</a>
+          <a href="#snacks" onclick="closeMenu()">Snacks</a>
+          <a href="#otros" onclick="closeMenu()">Otros</a>
         </div>
       </div>
       <a href="#eventos">Eventos</a>
@@ -512,15 +514,39 @@
   </footer>
 
   <script>
+    // ======================================================
+    // 1. Lógica del Menú de Hamburguesa (Añadido)
+    // ======================================================
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+
+    if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    }
+
+    // Función para cerrar el menú en móvil al hacer clic en un enlace interno
+    function closeMenu() {
+        if (window.innerWidth <= 768) {
+            navLinks.classList.remove('active');
+        }
+    }
+
+
+    // ======================================================
+    // 2. Lógica del Carrito de Compras (Mantenido)
+    // ======================================================
+
     // Configuración
-    localStorage.removeItem('bovedaCart');
+    localStorage.removeItem('bovedaCart'); // Vaciamos el carrito al cargar
     let cart = []; 
     
     const whatsappNumber = "593999935304"; 
     const cartModal = document.getElementById('cart-modal');
     const cartContainer = document.getElementById('cart-items-container');
     const checkoutButton = document.getElementById('checkout-button');
-    const clientNameInput = document.getElementById('client-name'); // Nuevo: campo de nombre
+    const clientNameInput = document.getElementById('client-name'); 
 
     // Función para cambiar la cantidad en el selector de producto
     function changeQuantity(buttonElement, delta) {
@@ -543,12 +569,14 @@
         document.getElementById('cart-count').textContent = totalItems;
         document.getElementById('modal-cart-count').textContent = totalItems;
         
-        // Desactivar el botón de pedido si el carrito está vacío O si el nombre está vacío
         const isNameValid = clientNameInput.value.trim() !== "";
         
-        if (totalItems === 0 || !isNameValid) {
+        if (totalItems === 0) {
             checkoutButton.disabled = true;
-            checkoutButton.textContent = "Carrito Vacío o Falta el Nombre";
+            checkoutButton.textContent = "Carrito Vacío";
+        } else if (!isNameValid) {
+            checkoutButton.disabled = true;
+            checkoutButton.textContent = "Falta el Nombre";
         } else {
             checkoutButton.disabled = false;
             checkoutButton.textContent = "Hacer Pedido por WhatsApp";
