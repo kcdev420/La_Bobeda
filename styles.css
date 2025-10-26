@@ -73,7 +73,7 @@ nav a.nav-link:hover {
 
 /* Botones principales */
 .btn {
-  background: linear-gradient(135deg, #6b4e31, #8b6f47); /* Degradado elegante inspirado en tonos cálidos */
+  background: linear-gradient(135deg, #333, #333); /* Degradado elegante inspirado en tonos cálidos */
   color: #fff;
   padding: 0.8rem 1.5rem;
   border-radius: 25px; /* Bordes más redondeados */
@@ -90,7 +90,7 @@ nav a.nav-link:hover {
 }
 
 .btn:hover {
-  background: linear-gradient(135deg, #8b6f47, #a68a64);
+  background: linear-gradient(135deg, #333, #333);
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
@@ -602,4 +602,5 @@ footer p {
     font-size: clamp(0.8rem, 2vw, 0.9rem);
   }
 }
+
 
