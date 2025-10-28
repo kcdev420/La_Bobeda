@@ -12,7 +12,7 @@
         position: fixed;
         bottom: 20px;
         right: 20px;
-        z-index: 100;
+        z-index: 9999;
         background: #333; /* Botón oscuro */
         color: #fff;
         padding: 10px 15px;
@@ -30,7 +30,7 @@
     .modal {
         display: none; 
         position: fixed; 
-        z-index: 200; 
+        z-index: 9998; 
         left: 0;
         top: 0;
         width: 100%; 
@@ -66,11 +66,17 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
         padding: 10px 0;
         border-bottom: 1px solid #eee; /* Separador sutil */
     }
+    
     .cart-item-name {
-        flex-grow: 1;
+        flex-basis: 100%; /* Ocupa toda la línea para el nombre y opciones */
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px; /* Pequeño margen para separar de los controles */
+        font-size: 1.1em;
     }
     .cart-item-controls {
         display: flex;
@@ -136,22 +142,38 @@
   </button>
   
   <div id="cart-modal" class="modal">
-      <div class="modal-content">
-          <span class="close-btn" onclick="closeCartModal()">&times;</span>
-          <h2>Tu Pedido</h2>
-          
-          <div class="client-name-container">
-              <label for="client-name">Tu Nombre:</label>
-              <input type="text" id="client-name" placeholder="Escribe tu nombre (requerido)" required>
-          </div>
-          
-          <div id="cart-items-container">
-              </div>
-          
-          <p class="cart-total-info">Total de Artículos: <span id="modal-cart-count">0</span></p>
-          <button id="checkout-button" class="btn" onclick="sendOrderToWhatsApp()">Hacer Pedido por WhatsApp</button>
-      </div>
-  </div>
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeCartModal()">&times;</span>
+        <h2>Tu Pedido</h2>
+        
+        <div class="client-name-container">
+            <label for="client-name">Tu Nombre:</label>
+            <input type="text" id="client-name" placeholder="Escribe tu nombre (requerido)" required>
+        </div>
+        
+        <div class="client-name-container">
+            <label for="order-type">Tipo de Pedido:</label>
+            <select id="order-type" onchange="toggleLocationInput()">
+                <option value="servirse">Para Servirse en el Local</option>
+                <option value="llevar">Para Llevar</option>
+            </select>
+            
+            <div id="location-input-container" style="margin-top: 15px; display: none;">
+                <label for="delivery-location">Ubicación / Dirección:</label>
+                <input type="text" id="delivery-location" placeholder="Ingresa tu ubicación o dirección">
+            </div>
+        </div>
+        
+        <div id="cart-items-container">
+            </div>
+        
+        <p class="cart-total-info">
+             Total de Artículos: <span id="modal-cart-count">0</span><br>
+                <span style="font-size: 1.3em; font-weight: 700; color: #068A3C;">TOTAL A PAGAR: <span id="cart-total">$0.00</span></span>
+         </p>
+        <button id="checkout-button" class="btn" onclick="sendOrderToWhatsApp()">Hacer Pedido por WhatsApp</button>
+    </div>
+</div>
   <header>
     <h1>La Boveda</h1>
     <i class='bx bx-menu menu-toggle' id="menu-toggle"></i>
@@ -162,10 +184,10 @@
       <div class="dropdown">
         <a href="#menu" class="nav-link dropbtn">Menú <i class='bx bx-chevron-down'></i></a>
         <div class="dropdown-content">
-          <a href="#platos-principales" onclick="closeMenuAndShowCategory('platos-principales')">Platos Principales</a>
-          <a href="#bebidas" onclick="closeMenuAndShowCategory('bebidas')">Bebidas</a>
-          <a href="#snacks" onclick="closeMenuAndShowCategory('snacks')">Snacks</a>
-          <a href="#otros" onclick="closeMenuAndShowCategory('otros')">Otros</a>
+            <a href="#platos-principales" onclick="closeMenu(); showCategoryView('platos-principales')">Platos Principales</a>
+            <a href="#bebidas" onclick="closeMenu(); showCategoryView('bebidas')">Bebidas</a>
+            <a href="#snacks" onclick="closeMenu(); showCategoryView('snacks')">Snacks</a>
+            <a href="#otros" onclick="closeMenu(); showCategoryView('otros')">Otros</a>
         </div>
       </div>
       
@@ -225,56 +247,69 @@
         <button class="btn back-btn">← Volver a Categorías</button>
         <h3>Platos Principales</h3>
         <div class="menu-grid">
-            <div class="menu-item" data-name="Carne Asada">
+            <div class="menu-item" data-name="Carne Asada" data-price="2.00">
                 <img src="https://images.unsplash.com/photo-1498092590708-048e0e2f46d7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170" alt="Carne asada">
                 <h4>Carne Asada</h4>
                 <p>Jugosa y al punto, con guarnición de papas rústicas</p>
+                <p class="item-price">$2.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
-            <div class="menu-item" data-name="Alitas BBQ">
-                <img src="https://images.unsplash.com/photo-1645371958635-88dd6c8e1be7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1171" alt="Alitas BBQ">
-                <h4>Alitas BBQ</h4>
-                <p>Con salsa de la casa y un toque de miel</p>
-                <div class="add-to-cart-controls">
-                    <div class="quantity-picker">
-                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
-                        <span class="item-qty-display">1</span>
-                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
-                    </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
-                </div>
-            </div>
-            <div class="menu-item" data-name="Hamburguesa Artesanal">
+            
+            <div class="menu-item" data-name="Hamburguesa Artesanal" data-price="5.00">
                 <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=60" alt="Hamburguesa Artesanal">
                 <h4>Hamburguesa Artesanal</h4>
                 <p>Pan artesanal, carne 100% res y papas fritas</p>
+                <p class="item-price">$5.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
-            <div class="menu-item" data-name="Parrillada Tierra y Mar">
+            <div class="menu-item" data-name="Alitas BBQ" data-price="4.00">
+                <img src="https://images.unsplash.com/photo-1645371958635-88dd6c8e1be7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1171" alt="Alitas BBQ">
+                <h4>Alitas BBQ</h4>
+                <p>Con salsa de la casa y un toque de miel</p>
+                <p class="item-price">$4.00</p>
+                <div style="text-align: center; margin-bottom: 10px;">
+                    <label for="salsa-alitas">Salsa:</label>
+                    <select id="salsa-alitas" style="padding: 5px; border-radius: 5px;">
+                        <option value="Clásica BBQ">Clásica BBQ</option>
+                        <option value="Miel y Mostaza">Miel y Mostaza</option>
+                        <option value="Picante">Picante</option>
+                    </select>
+                </div>
+                <div class="add-to-cart-controls">
+                    <div class="quantity-picker">
+                        <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
+                        <span class="item-qty-display">1</span>
+                        <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                    <button class="btn add-btn">Añadir al Carrito</button>
+                </div>
+            </div>
+            <div class="menu-item" data-name="Parrillada Tierra y Mar" data-price="9.00">
                 <img src="https://plus.unsplash.com/premium_photo-1717345994192-f5bc10b61c09?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170" alt="Parrillada Tierra y Mar">
                 <h4>Parrillada Tierra y Mar</h4>
                 <p>La combinación perfecta entre carne y mariscos</p>
+                <p class="item-price">$9.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
         </div>
@@ -286,150 +321,161 @@
         <h3>Bebidas</h3>
         <h5>Alcohol</h5>
         <div class="menu-grid">
-             <div class="menu-item" data-name="Pilsener">
+             <div class="menu-item" data-name="Pilsener" data-price="3.00">
                 <img src="https://images.unsplash.com/photo-1566633806327-68e152aaf26d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=870" alt="Cerveza">
                 <h4>Pilsener</h4>
                 <p>Pilsener bien helada</p>
+                <p class="item-price">$3.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
-            <div class="menu-item" data-name="Cerveza Club">
+            <div class="menu-item" data-name="Cerveza Club" data-price="3.00">
                 <img src="https://images.unsplash.com/photo-1587582816472-81e94768469a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=871" alt="Cerveza">
                 <h4>Cerveza Club</h4>
                 <p> Una refrescante Club.</p>
+                <p class="item-price">$3.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
-            <div class="menu-item" data-name="Jonny Walker">
+            <div class="menu-item" data-name="Jonny Walker" data-price="15.00">
                 <img src="https://images.unsplash.com/photo-1569529465841-dfecdab7503b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387" alt="Whisky">
                 <h4>Jonny Walker</h4>
                 <p>Wiskey Black Label </p>
+                <p class="item-price">$15.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
-            <div class="menu-item" data-name="Michelada">
+            <div class="menu-item" data-name="Michelada" data-price="5.00">
                 <img src="https://images.unsplash.com/photo-1706642249432-a0a3546c0537?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387" alt="Michelada">
                 <h4>Michelada</h4>
                 <p>Refrescante y con el toque picante perfecto</p>
+                <p class="item-price">$5.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
-            <div class="menu-item" data-name="Heineken">
+            <div class="menu-item" data-name="Heineken" data-price="3.00">
                 <img src="https://images.unsplash.com/photo-1618885472179-5e474019f2a9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387" alt="Cerveza">
                 <h4>Heineken</h4>
                 <p> Una refrescante cerveza alemana</p>
+                <p class="item-price">$3.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
-            <div class="menu-item" data-name="Vodka">
+            <div class="menu-item" data-name="Vodka" data-price="5.00">
                 <img src="https://images.unsplash.com/photo-1539606494565-02e568638d91?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=327" alt="Vodka">
                 <h4>Vodka</h4>
                 <p>Absolut Vodka el trago ideal</p>
+                <p class="item-price">$5.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
-            <div class="menu-item" data-name="Bacardi 151">
+            <div class="menu-item" data-name="Bacardi 151" data-price="19.00">
                 <img src="https://images.unsplash.com/photo-1561150169-371f366b828a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387" alt="Ron">
                 <h4>Bacardi 151</h4>
                 <p>Bacardi es lo mejor para disfutra con amigos</p>
+                <p class="item-price">$19.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
         </div>
         <h5>Gaseosas</h5>
         <div class="menu-grid">
-            <div class="menu-item" data-name="Coca-Cola">
+            <div class="menu-item" data-name="Coca-Cola" data-price="1.00">
                 <img src="https://images.unsplash.com/photo-1629186235045-80d4147d90dc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=464" alt="Gaseosa">
                 <h4>Coca-Cola</h4>
                 <p>Coca-Cola el sabor de la alegria</p>
+                <p class="item-price">$1.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
-            <div class="menu-item" data-name="Sprite">
+            <div class="menu-item" data-name="Sprite" data-price="1.00">
                 <img src="https://plus.unsplash.com/premium_photo-1681487652640-9257693221d5?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=580" alt="Gaseosa">
                 <h4>Sprite</h4>
                 <p>Sprite ideal para refrescarte</p>
+                <p class="item-price">$1.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
-            <div class="menu-item" data-name="Fanta">
+            <div class="menu-item" data-name="Fanta" data-price="1.00">
                 <img src="https://images.unsplash.com/photo-1566846128021-b940b0eec910?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387" alt="Gaseosa">
                 <h4>Fanta</h4>
                 <p>Con un sabor a naranja unico</p>
+                <p class="item-price">$1.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
-            <div class="menu-item" data-name="Fioravanti">
+            <div class="menu-item" data-name="Fioravanti" data-price="0.50">
                 <img src="https://images.unsplash.com/photo-1581927692308-be9e43b4d860?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387" alt="Gaseosa">
                 <h4>Fioravanti</h4>
                 <p>Fioravanti el sabor nacional</p>
+                <p class="item-price">$0.50</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
         </div>
@@ -440,43 +486,46 @@
         <button class="btn back-btn">← Volver a Categorías</button>
         <h3>Snacks</h3>
         <div class="menu-grid">
-            <div class="menu-item" data-name="Papas Fritas">
+            <div class="menu-item" data-name="Papas Fritas" data-price="1.00">
                 <img src="https://images.unsplash.com/photo-1617102738820-bee2545405fd?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=464" alt="Papas Fritas">
                 <h4>Papas Fritas</h4>
                 <p>Crujientes y doradas, con tus salsas favoritas</p>
+                <p class="item-price">$1.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
-            <div class="menu-item" data-name="Nachos con Queso">
+            <div class="menu-item" data-name="Nachos con Queso" data-price="2.00">
                 <img src="https://images.unsplash.com/photo-1669624272709-c5b91f66b1b7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=869" alt="Nachos">
                 <h4>Nachos con Queso</h4>
                 <p>Con abundante queso cheddar y jalapeños</p>
+                <p class="item-price">$2.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
-            <div class="menu-item" data-name="Chocolates (Sniker)">
+            <div class="menu-item" data-name="Chocolates (Sniker)" data-price="1.00">
                 <img src="https://images.unsplash.com/photo-1621939514649-280e2ee25f60?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=870" alt="Chocolates">
                 <h4>Chocolates</h4>
                 <p>Barras de chocolates y los mejores dulces</p>
+                <p class="item-price">$1.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
         </div>
@@ -487,43 +536,46 @@
         <button class="btn back-btn">← Volver a Categorías</button>
         <h3>Otros</h3>
         <div class="menu-grid">
-            <div class="menu-item" data-name="Postre del Día">
+            <div class="menu-item" data-name="Postre del Día" data-price="2.00">
                 <img src="https://images.unsplash.com/photo-1565299543923-37dd37887442?auto=format&fit=crop&w=800&q=60" alt="Postre">
                 <h4>Postre del Día</h4>
                 <p>Pregunta por nuestra dulce sorpresa de hoy</p>
+                <p class="item-price">$2.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
-            <div class="menu-item" data-name="Postre de chocolate">
+            <div class="menu-item" data-name="Postre de chocolate" data-price="2.00">
                 <img src="https://plus.unsplash.com/premium_photo-1722686477214-3a412565ad62?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=837" alt="Postre">
                 <h4>Postre de chocolate</h4>
                 <p>Pregunta por nuestra dulce sorpresa de de chocolate</p>
+                <p class="item-price">$2.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
-            <div class="menu-item" data-name="Postre de vainilla">
+            <div class="menu-item" data-name="Postre de vainilla" >
                 <img src="https://images.unsplash.com/photo-1593250136613-88a980458920?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=774" alt="Postre">
                 <h4>Postre de vainilla</h4>
                 <p>Pregunta por nuestra dulce sorpresa de vainilla</p>
+                <p class="item-price">$2.00</p>
                 <div class="add-to-cart-controls">
                     <div class="quantity-picker">
                         <button class="qty-btn minus-btn" onclick="changeQuantity(this, -1)">-</button>
                         <span class="item-qty-display">1</span>
                         <button class="qty-btn plus-btn" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="btn add-btn" onclick="addToCart(this)">Añadir al Carrito</button>
+                    <button class="btn add-btn">Añadir al Carrito</button>
                 </div>
             </div>
         </div>
@@ -560,7 +612,10 @@
     <p>© 2025 La Boveda. Todos los derechos reservados.</p>
   </footer>
 
-  <script>
+ <script>
+  try {
+    console.log("Iniciando script de La Boveda...");
+
     // ======================================================
     // 1. Lógica del Menú de Hamburguesa
     // ======================================================
@@ -573,110 +628,137 @@
         });
     }
 
-    // Función para cerrar el menú en móvil al hacer clic en un enlace interno
     function closeMenu() {
         if (window.innerWidth <= 768) {
             navLinks.classList.remove('active');
         }
     }
-    
-    // Nueva función para cerrar el menú y mostrar una categoría específica
+
     function closeMenuAndShowCategory(categoryId) {
-        closeMenu(); // Cierra el menú de hamburguesa
-        
-        // Simula un clic en la tarjeta de categoría correspondiente
+        closeMenu();
         const categoryCard = document.querySelector(`.menu-category-item[data-target="${categoryId}"]`);
         if (categoryCard) {
             categoryCard.click();
         }
     }
 
-
     // ======================================================
     // 2. Lógica del Carrito de Compras
     // ======================================================
-
-    let cart = []; 
-    
-    const whatsappNumber = "593999935304"; 
+    let cart = [];
+    const whatsappNumber = "593999935304";
     const cartModal = document.getElementById('cart-modal');
     const cartContainer = document.getElementById('cart-items-container');
     const checkoutButton = document.getElementById('checkout-button');
-    const clientNameInput = document.getElementById('client-name'); 
+    const clientNameInput = document.getElementById('client-name');
+    const orderTypeSelect = document.getElementById('order-type');
+    const locationInputContainer = document.getElementById('location-input-container');
+    const deliveryLocationInput = document.getElementById('delivery-location');
 
-    // Función para cambiar la cantidad en el selector de producto
+    function calculateTotal() {
+      const total = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+      return Math.round(total * 100) / 100;
+    }
+
+    function toggleLocationInput() {
+        if (!orderTypeSelect) return;
+        if (orderTypeSelect.value === 'llevar') {
+            locationInputContainer.style.display = 'block';
+        } else {
+            locationInputContainer.style.display = 'none';
+        }
+    }
+
     function changeQuantity(buttonElement, delta) {
         const quantityPicker = buttonElement.closest('.quantity-picker');
+        if (!quantityPicker) return;
         const quantityDisplay = quantityPicker.querySelector('.item-qty-display');
         let currentQty = parseInt(quantityDisplay.textContent);
-        
         currentQty += delta;
-        
-        if (currentQty < 1 || isNaN(currentQty)) {
-            currentQty = 1; 
-        }
-        
+        if (currentQty < 1 || isNaN(currentQty)) currentQty = 1;
         quantityDisplay.textContent = currentQty;
     }
 
-    // Función para actualizar el contador visual y habilitar/deshabilitar el botón
     function updateCartCount() {
+        const cartCountEl = document.getElementById('cart-count');
+        const modalCartCountEl = document.getElementById('modal-cart-count');
+        const cartTotalEl = document.getElementById('cart-total');
+
         let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-        document.getElementById('cart-count').textContent = totalItems;
-        document.getElementById('modal-cart-count').textContent = totalItems;
-        
-        const isNameValid = clientNameInput.value.trim() !== "";
-        
+        if (cartCountEl) cartCountEl.textContent = totalItems;
+        if (modalCartCountEl) modalCartCountEl.textContent = totalItems;
+        if (cartTotalEl) cartTotalEl.textContent = `$${calculateTotal().toFixed(2)}`;
+
+        if (!checkoutButton) return;
+
+        const isNameValid = clientNameInput && clientNameInput.value.trim() !== "";
+        const isLocationRequired = orderTypeSelect && orderTypeSelect.value === 'llevar';
+        const isLocationValid = !isLocationRequired || (deliveryLocationInput && deliveryLocationInput.value.trim() !== "");
+
         if (totalItems === 0) {
             checkoutButton.disabled = true;
             checkoutButton.textContent = "Carrito Vacío";
         } else if (!isNameValid) {
             checkoutButton.disabled = true;
             checkoutButton.textContent = "Falta el Nombre";
+        } else if (!isLocationValid) {
+            checkoutButton.disabled = true;
+            checkoutButton.textContent = "Falta la Ubicación";
         } else {
             checkoutButton.disabled = false;
             checkoutButton.textContent = "Hacer Pedido por WhatsApp";
         }
     }
 
-    // Función para añadir productos al carrito
     function addToCart(buttonElement) {
         const itemContainer = buttonElement.closest('.menu-item');
+        if (!itemContainer) return;
         const name = itemContainer.getAttribute('data-name');
-        
         const quantityDisplay = itemContainer.querySelector('.item-qty-display');
         let quantity = parseInt(quantityDisplay.textContent);
+        const price = parseFloat(itemContainer.getAttribute('data-price'));
 
         if (quantity < 1 || isNaN(quantity)) {
             alert("Por favor, selecciona una cantidad válida (mínimo 1).");
             return;
         }
 
-        const existingItem = cart.find(item => item.name === name);
+        let options = {};
+        if (name === "Alitas BBQ") {
+            const salsaSelect = itemContainer.querySelector('#salsa-alitas');
+            options.salsa = salsaSelect ? salsaSelect.value : 'No especificada';
+        }
+
+        const itemIdentifier = name + (options.salsa ? ` (${options.salsa})` : '');
+        const existingItem = cart.find(item => item.identifier === itemIdentifier);
 
         if (existingItem) {
             existingItem.quantity += quantity;
         } else {
-            cart.push({ name: name, quantity: quantity });
+            cart.push({
+                name: name,
+                quantity: quantity,
+                options: options,
+                identifier: itemIdentifier,
+                price: price
+            });
         }
-        
+
         localStorage.setItem('bovedaCart', JSON.stringify(cart));
         updateCartCount();
-        
-        // Feedback visual sutil
+
         const originalText = buttonElement.textContent;
         buttonElement.textContent = "✅ ¡Añadido!";
         setTimeout(() => {
             buttonElement.textContent = originalText;
-        }, 1000); 
+        }, 1000);
 
-        // Reiniciar la cantidad a 1 después de añadir
-        quantityDisplay.textContent = 1; 
+        quantityDisplay.textContent = 1;
     }
-    
-    // Función para renderizar (dibujar) los ítems del carrito en la modal
+
     function renderCart() {
-        cartContainer.innerHTML = ''; 
+        if (!cartContainer) return;
+        cartContainer.innerHTML = '';
 
         if (cart.length === 0) {
             cartContainer.innerHTML = '<p class="empty-cart-message">Tu carrito está vacío.</p>';
@@ -686,107 +768,137 @@
         cart.forEach(item => {
             const itemDiv = document.createElement('div');
             itemDiv.classList.add('cart-item');
-            
-            const encodedName = encodeURIComponent(item.name);
-            
+
+            const encodedIdentifier = encodeURIComponent(item.identifier);
+            const itemSubtotal = (item.quantity * item.price).toFixed(2);
+
+            let displayName = item.name;
+            if (item.options && item.options.salsa) {
+                displayName += ` (Salsa: ${item.options.salsa})`;
+            }
+
             itemDiv.innerHTML = `
-                <div class="cart-item-name">${item.name}</div>
-                <div class="cart-item-controls">
-                    <button class="qty-btn" onclick="updateCartItemQuantity('${encodedName}', -1)">-</button>
-                    <span class="cart-qty-display">${item.quantity}</span>
-                    <button class="qty-btn" onclick="updateCartItemQuantity('${encodedName}', 1)">+</button>
-                    <button class="remove-item-btn" onclick="removeItem('${encodedName}')">
-                        <i class='bx bx-trash'></i>
-                    </button>
+                <div class="cart-item-name">${displayName}</div>
+                <div class="cart-item-detail-row">
+                    <span class="cart-item-price">$${item.price.toFixed(2)} c/u</span>
+                    <div class="cart-item-controls">
+                        <button class="qty-btn" data-id="${encodedIdentifier}" data-delta="-1">-</button>
+                        <span class="cart-qty-display">${item.quantity}</span>
+                        <button class="qty-btn" data-id="${encodedIdentifier}" data-delta="1">+</button>
+                        <button class="remove-item-btn" data-id="${encodedIdentifier}">
+                            <i class='bx bx-trash'></i>
+                        </button>
+                    </div>
+                    <span class="cart-item-subtotal">Subtotal: $${itemSubtotal}</span>
                 </div>
             `;
             cartContainer.appendChild(itemDiv);
         });
-        
+
+        // Delegación de eventos para botones dentro del carrito (más robusto)
+        cartContainer.querySelectorAll('.qty-btn').forEach(btn => {
+            btn.onclick = () => {
+                const encodedId = btn.getAttribute('data-id');
+                const delta = parseInt(btn.getAttribute('data-delta'), 10);
+                updateCartItemQuantity(encodedId, delta);
+            };
+        });
+        cartContainer.querySelectorAll('.remove-item-btn').forEach(btn => {
+            btn.onclick = () => {
+                const encodedId = btn.getAttribute('data-id');
+                removeItem(encodedId);
+            };
+        });
+
         updateCartCount();
     }
-    
-    // Funciones de la Modal
+
     function openCartModal() {
-        renderCart(); 
-        cartModal.style.display = 'block';
+        renderCart();
+        if (cartModal) cartModal.style.display = 'block';
     }
 
     function closeCartModal() {
-        cartModal.style.display = 'none';
+        if (cartModal) cartModal.style.display = 'none';
     }
 
-    // Funciones de edición de la Modal
-    function updateCartItemQuantity(encodedName, delta) {
-        const name = decodeURIComponent(encodedName);
-        const item = cart.find(i => i.name === name);
-
+    function updateCartItemQuantity(encodedIdentifier, delta) {
+        const identifier = decodeURIComponent(encodedIdentifier);
+        const item = cart.find(i => i.identifier === identifier);
         if (item) {
             let newQty = item.quantity + delta;
-
             if (newQty < 1) {
-                // Si intenta bajar a 0, se elimina del carrito
-                removeItem(encodedName);
+                removeItem(encodedIdentifier);
                 return;
             }
-            
             item.quantity = newQty;
             localStorage.setItem('bovedaCart', JSON.stringify(cart));
-            
-            renderCart(); 
+            renderCart();
         }
     }
-    
-    function removeItem(encodedName) {
-        const name = decodeURIComponent(encodedName);
-        cart = cart.filter(item => item.name !== name); 
+
+    function removeItem(encodedIdentifier) {
+        const identifier = decodeURIComponent(encodedIdentifier);
+        cart = cart.filter(item => item.identifier !== identifier);
         localStorage.setItem('bovedaCart', JSON.stringify(cart));
-        
         renderCart();
     }
 
-
-    // Función final para enviar el pedido por WhatsApp (INCLUYE NOMBRE Y VACÍA EL CARRITO)
     function sendOrderToWhatsApp() {
-        const clientName = clientNameInput.value.trim();
+        const clientName = clientNameInput ? clientNameInput.value.trim() : "";
+        const orderType = orderTypeSelect ? orderTypeSelect.value : "servirse";
+        const deliveryLocation = deliveryLocationInput ? deliveryLocationInput.value.trim() : "";
+        const finalTotal = calculateTotal().toFixed(2);
 
         if (cart.length === 0) {
             alert("Tu carrito está vacío.");
             return;
         }
-        
         if (clientName === "") {
             alert("Por favor, ingresa tu nombre antes de enviar el pedido.");
-            clientNameInput.focus();
+            if (clientNameInput) clientNameInput.focus();
             return;
         }
-        
-        closeCartModal(); 
+        if (orderType === "llevar" && deliveryLocation === "") {
+            alert("Por favor, ingresa la ubicación o dirección para llevar.");
+            if (deliveryLocationInput) deliveryLocationInput.focus();
+            return;
+        }
 
-        // 1. Construir el mensaje de WhatsApp (incluyendo el nombre)
-        let message = `¡Hola La Boveda! Mi nombre es *${clientName}* y quiero realizar el siguiente pedido:\n\n`;
-        
+        closeCartModal();
+
+        let message = `¡Hola La Boveda! Mi nombre es *${clientName}*.\n\n`;
+        if (orderType === 'servirse') {
+            message += `Tipo de Pedido: *Para Servirse en el Local*.\n`;
+        } else {
+            message += `Tipo de Pedido: *Para Llevar*.\n`;
+            message += `Ubicación/Dirección: *${deliveryLocation}*.\n`;
+        }
+        message += "\nQuiero realizar el siguiente pedido:\n\n";
+
         cart.forEach((item, index) => {
-            message += `${index + 1}. *${item.quantity}x* ${item.name}\n`;
+            let itemLine = `${index + 1}. *${item.quantity}x* ${item.name}`;
+            if (item.options && item.options.salsa) itemLine += ` (Salsa: ${item.options.salsa})`;
+            message += `${itemLine}\n`;
         });
-
+        message += `\n*TOTAL FINAL DEL PEDIDO: $${finalTotal}*\n`;
         message += "\nPor favor, confirma mi orden.";
 
         const encodedMessage = encodeURIComponent(message);
         const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-
-        // 2. Abrir la ventana de WhatsApp
         window.open(whatsappURL, '_blank');
-        
-        // 3. Vaciamos el carrito automáticamente después de enviar.
+
         setTimeout(() => {
             cart = [];
             localStorage.removeItem('bovedaCart');
-            clientNameInput.value = ""; // También se borra el nombre
+            if (clientNameInput) clientNameInput.value = "";
+            if (deliveryLocationInput) deliveryLocationInput.value = "";
+            if (orderTypeSelect) orderTypeSelect.value = "servirse";
+            toggleLocationInput();
             updateCartCount();
-        }, 500); 
+        }, 500);
     }
-    
+
     // ======================================================
     // 3. Lógica del Menú por Categorías
     // ======================================================
@@ -795,38 +907,25 @@
         const categoryItems = document.querySelectorAll('.menu-category-item');
         const productViews = document.querySelectorAll('.product-view');
         const backButtons = document.querySelectorAll('.back-btn');
-        
-        // Mostrar productos al hacer clic en una categoría
+
         categoryItems.forEach(item => {
             item.addEventListener('click', () => {
                 const targetId = item.getAttribute('data-target');
                 const targetView = document.getElementById(targetId);
-
-                // Ocultar la vista de categorías
-                categoryContainer.style.display = 'none';
-
-                // Ocultar todas las vistas de productos
+                if (categoryContainer) categoryContainer.style.display = 'none';
                 productViews.forEach(view => view.style.display = 'none');
-                
-                // Mostrar la vista de productos seleccionada
-                if (targetView) {
-                    targetView.style.display = 'block';
-                }
+                if (targetView) targetView.style.display = 'block';
             });
         });
 
-        // Volver a la vista de categorías
         backButtons.forEach(button => {
             button.addEventListener('click', () => {
-                // Ocultar todas las vistas de productos
                 productViews.forEach(view => view.style.display = 'none');
-                
-                // Mostrar la vista de categorías
-                categoryContainer.style.display = 'flex'; // O 'grid', dependiendo del CSS
+                if (categoryContainer) categoryContainer.style.display = 'flex';
             });
         });
-        
-        // Cargar la cuenta del carrito al iniciar la página y añade un listener al campo de nombre
+
+        // Cargar carrito desde localStorage
         const savedCart = localStorage.getItem('bovedaCart');
         if (savedCart) {
             try {
@@ -837,37 +936,60 @@
             }
         }
         updateCartCount();
-        clientNameInput.addEventListener('input', updateCartCount); // Actualiza el botón al escribir el nombre
-        
-        
-        // ===== NUEVO: Lógica para el menú desplegable en móvil =====
+
+        if (clientNameInput) clientNameInput.addEventListener('input', updateCartCount);
+        if (orderTypeSelect) orderTypeSelect.addEventListener('change', () => { updateCartCount(); toggleLocationInput(); });
+        if (deliveryLocationInput) deliveryLocationInput.addEventListener('input', updateCartCount);
+
+        // móvil dropdown
         const mobileDropdowns = document.querySelectorAll('#nav-links .dropdown');
         mobileDropdowns.forEach(dropdown => {
             const dropbtn = dropdown.querySelector('.dropbtn');
+            if (!dropbtn) return;
             dropbtn.addEventListener('click', function(event) {
                 if (window.innerWidth <= 768) {
-                    event.preventDefault(); // Previene la navegación al hacer clic en el enlace principal
+                    event.preventDefault();
                     const content = this.nextElementSibling;
-                    // Cierra otros submenús abiertos
                     document.querySelectorAll('#nav-links .dropdown-content').forEach(otherContent => {
-                        if (otherContent !== content) {
-                            otherContent.style.display = 'none';
-                        }
+                        if (otherContent !== content) otherContent.style.display = 'none';
                     });
-                    // Alterna el submenú actual
                     content.style.display = (content.style.display === 'block') ? 'none' : 'block';
                 }
             });
         });
+
+        // Conectar botón del carrito aquí (más fiable que onclick inline)
+        const cartBtnEl = document.getElementById('cart-button');
+        if (cartBtnEl) {
+          cartBtnEl.addEventListener('click', openCartModal);
+        }
+
+        // Delegar eventos de "Añadir al carrito" (por si quieres evitar onclick inline)
+        document.querySelectorAll('.add-btn').forEach(btn => {
+            btn.addEventListener('click', function() { addToCart(this); });
+        });
     });
-    
+
     // Cerrar la modal haciendo clic fuera de ella
     window.onclick = function(event) {
         if (event.target == cartModal) {
             closeCartModal();
         }
-    }
-  </script>
+    };
+
+    // Exponer en window por compatibilidad con atributos inline
+    window.openCartModal = openCartModal;
+    window.closeCartModal = closeCartModal;
+    window.sendOrderToWhatsApp = sendOrderToWhatsApp;
+    window.changeQuantity = changeQuantity; // si mantienes onclick inline en botones de cantidad
+    window.addToCart = addToCart; // por compatibilidad si mantienes onclick inline
+
+    console.log("Script cargado correctamente.");
+  } catch (err) {
+    console.error("Error en el script principal:", err);
+  }
+</script>
+
 
 </body>
 </html>
