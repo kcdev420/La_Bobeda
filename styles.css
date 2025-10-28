@@ -317,7 +317,7 @@ nav a.nav-link:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   margin-top: auto;
   padding-top: 10px;
 }
@@ -630,13 +630,23 @@ footer p {
   }
 
   .add-btn {
-    font-size: 0.85rem;         /* texto más pequeño */
-    padding: 5px 12px;          /* botón más compacto */
-    border-radius: 8px;
-    background-color: #333;
-    color: #fff;
-    transition: background 0.2s;
-  }
+  display: inline-flex;              /* asegura centrado del texto */
+  justify-content: center;           /* centra el texto horizontalmente */
+  align-items: center;               /* centra verticalmente */
+  text-align: center;                /* previene alineación a la izquierda */
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #333;
+  color: #fff;
+  cursor: pointer;
+  width: auto;                       /* no se expande */
+  min-width: 130px;                  /* ancho mínimo uniforme */
+  max-width: 80%;                    /* evita que ocupe todo el ancho */
+  transition: all 0.2s ease;
+}
 
   .add-btn:hover {
     background-color: #00c853;  /* verde al pasar el mouse */
