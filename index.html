@@ -842,6 +842,7 @@
         cart = cart.filter(item => item.identifier !== identifier);
         localStorage.setItem('bovedaCart', JSON.stringify(cart));
         renderCart();
+        updateCartCount(); // ✅ Actualiza total y contador inmediatamente
     }
 
     function sendOrderToWhatsApp() {
