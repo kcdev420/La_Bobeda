@@ -239,7 +239,7 @@ nav a.nav-link:hover {
 .menu-item .item-price {
     font-size: 1.3em;
     font-weight: 700;
-    color: #e44d26; /* Color destacado para el precio */
+    color: #068A3C; /* Color destacado para el precio */
     margin-bottom: 10px;
 }
 
@@ -621,4 +621,27 @@ footer p {
     padding: 0.6rem 1.2rem;
     font-size: clamp(0.8rem, 2vw, 0.9rem);
   }
+  /* --- Botones "Añadir al Carrito" más compactos y centrados --- */
+  .add-to-cart-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .add-btn {
+    font-size: 0.85rem;         /* texto más pequeño */
+    padding: 5px 12px;          /* botón más compacto */
+    border-radius: 8px;
+    background-color: #333;
+    color: #fff;
+    transition: background 0.2s;
+  }
+
+  .add-btn:hover {
+    background-color: #00c853;  /* verde al pasar el mouse */
+    color: white;
+    transform: scale(1.05);
+  }
+
 }
